@@ -14,7 +14,7 @@ namespace POC.Application.Responses
             _totalRecordCount = totalRecordCount;
         }
 
-        public ResponseResult(IList<ValidationFailure> validationFailures) : base()
+        public ResponseResult(IReadOnlyCollection<ValidationFailure> validationFailures) : base()
         {
             Success = false;
             Data = default;
