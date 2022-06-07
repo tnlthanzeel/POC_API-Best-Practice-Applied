@@ -62,7 +62,7 @@ namespace POC.Api.Middleware
                 //    result = JsonConvert.SerializeObject(errorResponse);
                 //    break;
 
-                case Exception ex:
+                case Exception:
                     httpStatusCode = HttpStatusCode.InternalServerError;
                     errorResponse.ValidationErrors.Add("Something went wrong, please try again");
                     result = JsonConvert.SerializeObject(errorResponse);
