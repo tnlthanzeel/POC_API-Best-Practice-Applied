@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.ApplicationBlocks.Data;
 using Microsoft.Extensions.Configuration;
 using POC.Application.Responses;
 using System.Collections.Generic;
