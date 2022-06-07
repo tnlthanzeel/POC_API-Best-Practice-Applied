@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Command.CreateUser
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, SuccessResponse<CreateUserCommandResponse>>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ResponseResult<CreateUserCommandResponse>>
     {
         private readonly IMapper _mapper;
         private readonly IAsyncRepository<User> _userRepository;
@@ -21,22 +21,22 @@ namespace POC.Application.Features.Users.Command.CreateUser
             _userRepository = userRepository;
         }
 
-        public async Task<SuccessResponse<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var result = new SuccessResponse<CreateUserCommandResponse>();
+            var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 
-            await Validator<CreateUserCommandValidator>.ValidateAsync(request, result);
-
-            if (result.Success == false)
+            if (validationResult.IsValid == false)
             {
-                throw new ValidationException(result.ValidationErrors);
+                return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
             }
 
             var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 
             user = await _userRepository.AddAsync(user);
 
-            result.Data = _mapper.Map<CreateUserCommandResponse>(user);
+            var mappedObj = _mapper.Map<CreateUserCommandResponse>(user);
+
+            var result = new ResponseResult<CreateUserCommandResponse>(mappedObj);
 
             return result;
         }

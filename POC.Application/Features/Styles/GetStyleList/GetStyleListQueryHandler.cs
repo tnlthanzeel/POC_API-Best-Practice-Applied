@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.Styles.GetStyleList
 {
-    public class GetStyleListQueryHandler : IRequestHandler<GetStyleListQuery, SuccessResponse<IEnumerable<StyleListViewModel>>>
+    public class GetStyleListQueryHandler : IRequestHandler<GetStyleListQuery, ResponseResult<IEnumerable<StyleListViewModel>>>
     {
         private readonly IMapper _mapper;
         private readonly string _starIEConnString;
@@ -24,7 +24,7 @@ namespace POC.Application.Features.Styles.GetStyleList
             _starIEConnString = configuration.GetConnectionString("StarIE-ADOConnection");
         }
 
-        public async Task<SuccessResponse<IEnumerable<StyleListViewModel>>> Handle(GetStyleListQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<IEnumerable<StyleListViewModel>>> Handle(GetStyleListQuery request, CancellationToken cancellationToken)
         {
             using (var conn = new SqlConnection(_starIEConnString))
             {
@@ -45,11 +45,7 @@ namespace POC.Application.Features.Styles.GetStyleList
 
                     var list = _mapper.Map<IEnumerable<StyleListViewModel>>(dt.CreateDataReader());
 
-                    var response = new SuccessResponse<IEnumerable<StyleListViewModel>>()
-                    {
-                        TotalRecordCount = list.Count(),
-                        Data = list
-                    };
+                    var response = new ResponseResult<IEnumerable<StyleListViewModel>>(list, list.Count());
 
                     return response;
 

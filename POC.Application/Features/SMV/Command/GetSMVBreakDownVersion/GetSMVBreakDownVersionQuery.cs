@@ -6,7 +6,7 @@ using System.Text;
 
 namespace POC.Application.Features.SMV.Command.GetSMVBreakDownVersion
 {
-    public class GetSMVBreakDownVersionQuery : IRequest<SuccessResponse<SMVBreakDownVersionViewModel>>
+    public class GetSMVBreakDownVersionQuery : IRequest<ResponseResult<SMVBreakDownVersionViewModel>>
     {
         public string VersionHDID { get; set; }
     }

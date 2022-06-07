@@ -25,9 +25,9 @@ namespace POC.Api.Controllers
 
 
         [HttpGet("garment/types", Name = "GetAllIEGarmentTypes")]
-        [ProducesResponseType(typeof(SuccessResponse<IEnumerable<GarmentTypeListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult<IEnumerable<GarmentTypeListViewModel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<SuccessResponse<IEnumerable<GarmentTypeListViewModel>>>> GetAllUsers()
+        public async Task<ActionResult<ResponseResult<IEnumerable<GarmentTypeListViewModel>>>> GetAllUsers()
         {
             try
             {
@@ -44,9 +44,9 @@ namespace POC.Api.Controllers
 
 
         [HttpGet("garment/style", Name = "GetAllIEStyle")]
-        [ProducesResponseType(typeof(SuccessResponse<IEnumerable<StyleListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult<IEnumerable<StyleListViewModel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<SuccessResponse<IEnumerable<StyleListViewModel>>>> GetAllStyles()
+        public async Task<ActionResult<ResponseResult<IEnumerable<StyleListViewModel>>>> GetAllStyles()
         {
             var viewModel = await _mediator.Send(new GetStyleListQuery());
             return Ok(viewModel);
@@ -54,9 +54,9 @@ namespace POC.Api.Controllers
 
 
         [HttpGet("garment/smvbreakdown/{versionHDID}", Name = "GetBreakDownData")]
-        [ProducesResponseType(typeof(SuccessResponse<SMVBreakDownVersionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult<SMVBreakDownVersionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<SuccessResponse<SMVBreakDownVersionViewModel>>> GetBreakDownData(string versionHDID)
+        public async Task<ActionResult<ResponseResult<SMVBreakDownVersionViewModel>>> GetBreakDownData(string versionHDID)
         {
             try
             {

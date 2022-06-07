@@ -6,7 +6,7 @@ using System.Text;
 
 namespace POC.Application.Features.Garment.GetGarmentTypeList
 {
-    public class GetGarmentTypeListQuery : IRequest<SuccessResponse<IEnumerable<GarmentTypeListViewModel>>>
+    public class GetGarmentTypeListQuery : IRequest<ResponseResult<IEnumerable<GarmentTypeListViewModel>>>
     {
     }
 }

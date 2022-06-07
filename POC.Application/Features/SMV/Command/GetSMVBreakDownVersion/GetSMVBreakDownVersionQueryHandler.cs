@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.SMV.Command.GetSMVBreakDownVersion
 {
-    public class GetSMVBreakDownVersionQueryHandler : IRequestHandler<GetSMVBreakDownVersionQuery, SuccessResponse<SMVBreakDownVersionViewModel>>
+    public class GetSMVBreakDownVersionQueryHandler : IRequestHandler<GetSMVBreakDownVersionQuery, ResponseResult<SMVBreakDownVersionViewModel>>
     {
         private readonly IMapper _mapper;
         private readonly string _starIEConnString;
@@ -24,7 +24,7 @@ namespace POC.Application.Features.SMV.Command.GetSMVBreakDownVersion
             _starIEConnString = configuration.GetConnectionString("StarIE-ADOConnection");
         }
 
-        public async Task<SuccessResponse<SMVBreakDownVersionViewModel>> Handle(GetSMVBreakDownVersionQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<SMVBreakDownVersionViewModel>> Handle(GetSMVBreakDownVersionQuery request, CancellationToken cancellationToken)
         {
             using (var conn = new SqlConnection(_starIEConnString))
             {
@@ -79,10 +79,7 @@ namespace POC.Application.Features.SMV.Command.GetSMVBreakDownVersion
 
                     smvBDHeader.SMVBreakDownDetail = smvDetails;
 
-                    var response = new SuccessResponse<SMVBreakDownVersionViewModel>()
-                    {
-                        Data = smvBDHeader
-                    };
+                    var response = new ResponseResult<SMVBreakDownVersionViewModel>(smvBDHeader);
 
                     return response;
 

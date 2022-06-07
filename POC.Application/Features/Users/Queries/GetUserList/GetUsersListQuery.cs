@@ -6,7 +6,7 @@ using System.Text;
 
 namespace POC.Application.Features.Users.Queries.GetUserList
 {
-    public class GetUsersListQuery : IRequest<SuccessResponse<IEnumerable<UserViewModel>>>
+    public class GetUsersListQuery : IRequest<ResponseResult<IEnumerable<UserViewModel>>>
     {
     }
 }

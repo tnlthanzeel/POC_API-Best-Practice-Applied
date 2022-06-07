@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.Garment.GetGarmentTypeList
 {
-    public class GetGarmentTypeListQueryHandler : IRequestHandler<GetGarmentTypeListQuery, SuccessResponse<IEnumerable<GarmentTypeListViewModel>>>
+    public class GetGarmentTypeListQueryHandler : IRequestHandler<GetGarmentTypeListQuery, ResponseResult<IEnumerable<GarmentTypeListViewModel>>>
     {
         private readonly IMapper _mapper;
         private readonly string _opsConnString;
@@ -27,7 +27,7 @@ namespace POC.Application.Features.Garment.GetGarmentTypeList
 
         }
 
-        public async Task<SuccessResponse<IEnumerable<GarmentTypeListViewModel>>> Handle(GetGarmentTypeListQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<IEnumerable<GarmentTypeListViewModel>>> Handle(GetGarmentTypeListQuery request, CancellationToken cancellationToken)
         {
             using (var conn = new SqlConnection(_opsConnString))
             {
@@ -46,11 +46,8 @@ namespace POC.Application.Features.Garment.GetGarmentTypeList
                     var list = _mapper.Map<IEnumerable<GarmentTypeListViewModel>>(dt.CreateDataReader());
 
 
-                    var response = new SuccessResponse<IEnumerable<GarmentTypeListViewModel>>()
-                    {
-                        TotalRecordCount = list.Count(),
-                        Data = list
-                    };
+                    var response = new ResponseResult<IEnumerable<GarmentTypeListViewModel>>(list, list.Count());
+
                     return response;
                 }
                 catch (System.Exception ex)

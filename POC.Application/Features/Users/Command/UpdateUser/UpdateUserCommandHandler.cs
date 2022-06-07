@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Command.UpdateUser
 {
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
+    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, ResponseResult<Unit>>
     {
         private readonly IMapper _mapper;
         private readonly IAsyncRepository<User> _userRepository;
@@ -24,10 +24,8 @@ namespace POC.Application.Features.Users.Command.UpdateUser
             _mapper = mapper;
             _userRepository = userRepository;
         }
-        public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<Unit>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var result = new SuccessResponse<ValidationResult>();
-
             var eventToUpdate = await _userRepository.GetByIdAsync(request.Id);
 
             if (eventToUpdate == null)
@@ -36,18 +34,18 @@ namespace POC.Application.Features.Users.Command.UpdateUser
             }
 
 
-            await Validator<UpdateUserCommandValidator>.ValidateAsync(request, result);
+            var validationResult = await Validator<UpdateUserCommandValidator>.ValidateAsync(request);
 
-            if (result.Success == false)
+            if (validationResult.IsValid == false)
             {
-                throw new ValidationException(result.ValidationErrors);
+                return new ResponseResult<Unit>(validationResult.Errors);
             }
 
             _mapper.Map(request, eventToUpdate);
 
             await _userRepository.UpdateAsync(eventToUpdate);
 
-            return Unit.Value;
+            return new ResponseResult<Unit>(Unit.Value);
         }
     }
 }

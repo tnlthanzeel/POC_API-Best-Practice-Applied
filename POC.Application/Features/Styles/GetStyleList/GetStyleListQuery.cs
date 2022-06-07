@@ -6,7 +6,7 @@ using System.Text;
 
 namespace POC.Application.Features.Styles.GetStyleList
 {
-    public class GetStyleListQuery : IRequest<SuccessResponse<IEnumerable<StyleListViewModel>>>
+    public class GetStyleListQuery : IRequest<ResponseResult<IEnumerable<StyleListViewModel>>>
     {
     }
 }

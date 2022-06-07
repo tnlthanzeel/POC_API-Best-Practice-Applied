@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Queries.GetUserList
 {
-    class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery, SuccessResponse<IEnumerable<UserViewModel>>>
+    class GetUsersListQueryHandler : IRequestHandler<GetUsersListQuery, ResponseResult<IEnumerable<UserViewModel>>>
     {
         private readonly IMapper _mapper;
         private readonly IAsyncRepository<User> _userRepository;
@@ -22,17 +22,13 @@ namespace POC.Application.Features.Users.Queries.GetUserList
             _userRepository = userRepository;
         }
 
-        public async Task<SuccessResponse<IEnumerable<UserViewModel>>> Handle(GetUsersListQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseResult<IEnumerable<UserViewModel>>> Handle(GetUsersListQuery request, CancellationToken cancellationToken)
         {
             var queryResult = await _userRepository.ListAllAsync();
 
             var vmList = _mapper.Map<List<UserViewModel>>(queryResult);
 
-            return new SuccessResponse<IEnumerable<UserViewModel>>()
-            {
-                Data = vmList,
-                TotalRecordCount = vmList.Count
-            };
+            return new ResponseResult<IEnumerable<UserViewModel>>(vmList, vmList.Count);
         }
     }
 }

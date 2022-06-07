@@ -29,11 +29,11 @@ namespace POC.Api.Controllers
 
         [HttpGet(Name = "GetAllUsers")]
         //[ResponseCache(Duration = 120)]
-        [ProducesResponseType(typeof(SuccessResponse<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
         //[HttpCacheValidation(MustRevalidate = true)]
-        public async Task<ActionResult<SuccessResponse<IEnumerable<UserViewModel>>>> GetAllUsers()
+        public async Task<ActionResult<ResponseResult<IEnumerable<UserViewModel>>>> GetAllUsers()
         {
             var viewModel = await _mediator.Send(new GetUsersListQuery());
             return Ok(viewModel);
@@ -42,37 +42,44 @@ namespace POC.Api.Controllers
 
         [HttpGet("{id}", Name = "GetUser")]
         //[ResponseCache(Duration = 120)]
-        [ProducesResponseType(typeof(SuccessResponse<UserDetailViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
         //[HttpCacheValidation(MustRevalidate = true)]
-        public async Task<ActionResult<SuccessResponse<UserDetailViewModel>>> GetUser(Guid id)
+        public async Task<ActionResult<ResponseResult<UserDetailViewModel>>> GetUser(Guid id)
         {
             var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
             return Ok(viewModel);
         }
 
         [HttpPost(Name = "AddUser")]
-        [ProducesResponseType(typeof(SuccessResponse<CreateUserCommandResponse>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<ActionResult<SuccessResponse<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
+        public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
         {
             var response = await _mediator.Send(createUserCommand);
 
-            return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
+            if (response.Success)
+            {
+                return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
+            }
 
+            else
+            {
+                return BadRequest(response);
+            }
 
         }
 
         [HttpPut("{id}", Name = "UpdateUser")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<SuccessResponse<CreateUserCommandResponse>>> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
+        public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
         {
             updateUserCommand.Id = id;
             await _mediator.Send(updateUserCommand);
