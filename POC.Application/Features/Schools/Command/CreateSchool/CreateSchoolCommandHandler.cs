@@ -18,7 +18,7 @@ namespace POC.Application.Features.Schools.Command.CreateSchool
             _mapper = mapper;
         }
 
-        public async Task<CreateSchoolCommandResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
+        public Task<CreateSchoolCommandResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

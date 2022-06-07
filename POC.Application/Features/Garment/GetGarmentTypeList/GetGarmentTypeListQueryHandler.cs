@@ -47,9 +47,9 @@ namespace POC.Application.Features.Garment.GetGarmentTypeList
 
                     var response = new ResponseResult<IEnumerable<GarmentTypeListViewModel>>(list, list.Count());
 
-                    return response;
+                    return await Task.FromResult(response);
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
                     throw;
                 }

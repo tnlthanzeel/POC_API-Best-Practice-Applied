@@ -17,7 +17,7 @@ namespace POC.Application.Features.Events.Queries.GetEventList
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventListViewModel>> Handle(GetEventListQuery request, CancellationToken cancellationToken)
+        public  Task<IEnumerable<EventListViewModel>> Handle(GetEventListQuery request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

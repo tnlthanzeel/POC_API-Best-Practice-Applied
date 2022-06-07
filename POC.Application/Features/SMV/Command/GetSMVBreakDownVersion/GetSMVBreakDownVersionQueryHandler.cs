@@ -81,12 +81,11 @@ namespace POC.Application.Features.SMV.Command.GetSMVBreakDownVersion
 
                     var response = new ResponseResult<SMVBreakDownVersionViewModel>(smvBDHeader);
 
-                    return response;
+                    return await Task.FromResult(response);
 
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
-
                     throw;
                 }
             }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using POC.Application.Exceptions;
 using POC.Application.Responses;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,38 +44,34 @@ namespace POC.Api.Middleware
 
             switch (exception)
             {
-                case ValidationException validationException:
-                    httpStatusCode = HttpStatusCode.BadRequest;
-                    errorResponse.ValidationErrors.AddRange(validationException.ValdationErrors);
-                    result = JsonConvert.SerializeObject(errorResponse);
-                    break;
+                //case ValidationException validationException:
+                //    httpStatusCode = HttpStatusCode.BadRequest;
+                //    errorResponse.ValidationErrors.AddRange(validationException.ValdationErrors);
+                //    result = JsonConvert.SerializeObject(errorResponse);
+                //    break;
 
-                case BadRequestException badRequestException:
-                    httpStatusCode = HttpStatusCode.BadRequest;
-                    errorResponse.ValidationErrors.Add(badRequestException.Message);
-                    result = JsonConvert.SerializeObject(errorResponse);
-                    break;
+                //case BadRequestException badRequestException:
+                //    httpStatusCode = HttpStatusCode.BadRequest;
+                //    errorResponse.ValidationErrors.Add(badRequestException.Message);
+                //    result = JsonConvert.SerializeObject(errorResponse);
+                //    break;
 
-                case NotFoundException notFoundException:
-                    httpStatusCode = HttpStatusCode.NotFound;
-                    errorResponse.ValidationErrors.Add(exception.Message);
-                    result = JsonConvert.SerializeObject(errorResponse);
-                    break;
+                //case NotFoundException notFoundException:
+                //    httpStatusCode = HttpStatusCode.NotFound;
+                //    errorResponse.ValidationErrors.Add(notFoundException.Message);
+                //    result = JsonConvert.SerializeObject(errorResponse);
+                //    break;
 
                 case Exception ex:
                     httpStatusCode = HttpStatusCode.InternalServerError;
-                    errorResponse.ValidationErrors.Add("Something went wrong");
+                    errorResponse.ValidationErrors.Add("Something went wrong, please try again");
                     result = JsonConvert.SerializeObject(errorResponse);
                     break;
             }
 
-            context.Response.StatusCode = (int)httpStatusCode;
+            Log.Error($"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}");
 
-            if (result == string.Empty)
-            {
-                errorResponse.ValidationErrors.Add(exception.Message);
-                result = JsonConvert.SerializeObject(errorResponse);
-            }
+            context.Response.StatusCode = (int)httpStatusCode;
 
             return context.Response.WriteAsync(result);
         }

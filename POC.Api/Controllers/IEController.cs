@@ -14,6 +14,7 @@ namespace POC.Api.Controllers
 {
     [Route("api/ie")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class IEController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -32,12 +33,11 @@ namespace POC.Api.Controllers
             try
             {
 
-            var viewModel = await _mediator.Send(new GetGarmentTypeListQuery());
-            return Ok(viewModel);
+                var viewModel = await _mediator.Send(new GetGarmentTypeListQuery());
+                return Ok(viewModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
@@ -60,11 +60,11 @@ namespace POC.Api.Controllers
         {
             try
             {
-            var viewModel = await _mediator.Send(new GetSMVBreakDownVersionQuery() { VersionHDID = versionHDID });
-            return Ok(viewModel);
+                var viewModel = await _mediator.Send(new GetSMVBreakDownVersionQuery() { VersionHDID = versionHDID });
+                return Ok(viewModel);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;

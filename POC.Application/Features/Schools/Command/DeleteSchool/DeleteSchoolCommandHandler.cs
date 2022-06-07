@@ -16,7 +16,7 @@ namespace POC.Application.Features.Schools.Command.DeleteSchool
 
         public async Task<Unit> Handle(DeleteSchoolCommand request, CancellationToken cancellationToken)
         {
-            return Unit.Value;
+            return await Task.FromResult(Unit.Value);
         }
     }
 }

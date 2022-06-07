@@ -5,6 +5,7 @@ using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Application.Validators;
 using POC.Domain.Entitities;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,6 +30,14 @@ namespace POC.Application.Features.Users.Command.CreateUser
             {
                 return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
             }
+
+            throw new Exception("this is an internal server error");
+
+            var badRequestException = new BadRequestException("student name is already taken");
+
+            var notfound = new NotFoundException("student ID", 1);
+
+            return new ResponseResult<CreateUserCommandResponse>(badRequestException);
 
             var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 

@@ -10,19 +10,13 @@
     <PackageReference Include="FluentValidation" Version="11.0.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Microsoft.ApplicationBlocks.Data" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\POC.Domain\POC.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.MyUtil">
-      <HintPath>..\..\..\..\..\Frameworks\ERP_Service\ERPService\Bin\System.MyUtil.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
 </Project>

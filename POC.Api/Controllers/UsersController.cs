@@ -11,14 +11,14 @@ using POC.Application.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace POC.Api.Controllers
 {
     [Route("api/users")]
-    [ApiController]
     //[ResponseCache(CacheProfileName = "DefaultCache")]
-    public class UsersController : ControllerBase
+    public class UsersController : AppControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -56,21 +56,17 @@ namespace POC.Api.Controllers
         [HttpPost(Name = "AddUser")]
         [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
 
         public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
         {
             var response = await _mediator.Send(createUserCommand);
 
             if (response.Success)
-            {
                 return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
-            }
 
             else
-            {
-                return BadRequest(response);
-            }
+                return UnsuccessfullResponse(response);
 
         }
 

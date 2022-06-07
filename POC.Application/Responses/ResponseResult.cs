@@ -3,11 +3,16 @@ using POC.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace POC.Application.Responses
 {
     public sealed class ResponseResult<T> : BaseResponse
     {
+        [Newtonsoft.Json.JsonIgnore] // ingore the property when serializing
+        [System.Text.Json.Serialization.JsonIgnore] // ingore the property in swagger doc
+        public HttpStatusCode HttpStatusCode { get; }
+
         public ResponseResult(T value, int totalRecordCount = 1) : base()
         {
             Data = value;
@@ -16,6 +21,7 @@ namespace POC.Application.Responses
 
         public ResponseResult(IList<ValidationFailure> validationFailures) : base()
         {
+            HttpStatusCode = HttpStatusCode.BadRequest;
             Success = false;
             Data = default;
 
@@ -25,19 +31,29 @@ namespace POC.Application.Responses
             }
         }
 
-        public ResponseResult(Exception ex) : base()
+        public ResponseResult(ApplicationException ex) : base()
         {
             Success = false;
             Data = default;
 
             switch (ex)
             {
-                case BadRequestException: ValidationErrors.Add(ex.Message); break;
+                case BadRequestException:
+                    HttpStatusCode = HttpStatusCode.BadRequest;
+                    ValidationErrors.Add(ex.Message);
+                    break;
 
-                default: throw ex;
+                case ValidationException e:
+                    HttpStatusCode = HttpStatusCode.BadRequest;
+                    ValidationErrors.AddRange(e.ValdationErrors);
+                    break;
+
+                case NotFoundException:
+                    HttpStatusCode = HttpStatusCode.NotFound;
+                    ValidationErrors.Add(ex.Message);
+                    break;
+
             };
-
-
         }
 
         private int _totalRecordCount = 1;
@@ -54,5 +70,6 @@ namespace POC.Application.Responses
             }
         }
         public T Data { get; private set; }
+
     }
 }

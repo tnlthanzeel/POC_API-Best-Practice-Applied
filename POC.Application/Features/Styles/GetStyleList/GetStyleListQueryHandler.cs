@@ -47,10 +47,10 @@ namespace POC.Application.Features.Styles.GetStyleList
 
                     var response = new ResponseResult<IEnumerable<StyleListViewModel>>(list, list.Count());
 
-                    return response;
+                    return await Task.FromResult(response);
 
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
 
                     throw;

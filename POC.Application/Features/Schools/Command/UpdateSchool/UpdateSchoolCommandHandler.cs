@@ -19,7 +19,7 @@ namespace POC.Application.Features.Schools.Command.UpdateSchool
 
         public async Task<Unit> Handle(UpdateSchoolCommand request, CancellationToken cancellationToken)
         {
-            return Unit.Value;
+            return await Task.FromResult(Unit.Value);
         }
     }
 }
