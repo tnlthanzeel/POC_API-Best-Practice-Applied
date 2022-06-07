@@ -31,13 +31,13 @@ namespace POC.Application.Features.Users.Command.CreateUser
                 return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
             }
 
-            throw new Exception("this is an internal server error");
+            // throw new Exception("this is an internal server error");
 
             var badRequestException = new BadRequestException("student name is already taken");
 
             var notfound = new NotFoundException("student ID", 1);
 
-            return new ResponseResult<CreateUserCommandResponse>(badRequestException);
+            //return new ResponseResult<CreateUserCommandResponse>(badRequestException);
 
             var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 
