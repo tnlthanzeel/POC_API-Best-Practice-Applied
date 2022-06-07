@@ -69,7 +69,7 @@ namespace POC.Api.Middleware
                     break;
             }
 
-            Log.Error($"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}");
+            Log.Error($"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}\n{new string('-', 150)}\n");
 
             context.Response.StatusCode = (int)httpStatusCode;
 
