@@ -1,8 +1,8 @@
 ﻿using FluentValidation.Results;
-using POC.Application.Responses;
+using POC.Application.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace POC.Application.Responses
 {
@@ -14,18 +14,30 @@ namespace POC.Application.Responses
             _totalRecordCount = totalRecordCount;
         }
 
-        public ResponseResult(IReadOnlyCollection<ValidationFailure> validationFailures) : base()
+        public ResponseResult(IList<ValidationFailure> validationFailures) : base()
         {
             Success = false;
             Data = default;
 
             if (validationFailures.Count > 0)
             {
-                foreach (var error in validationFailures)
-                {
-                    base.ValidationErrors.Add(error.ErrorMessage);
-                }
+                ValidationErrors.AddRange(validationFailures.Select(s => s.ErrorMessage).ToList());
             }
+        }
+
+        public ResponseResult(Exception ex) : base()
+        {
+            Success = false;
+            Data = default;
+
+            switch (ex)
+            {
+                case BadRequestException: ValidationErrors.Add(ex.Message); break;
+
+                default: throw ex;
+            };
+
+
         }
 
         private int _totalRecordCount = 1;
@@ -40,11 +52,6 @@ namespace POC.Application.Responses
 
                 return _totalRecordCount;
             }
-
-            //set
-            //{
-            //    _totalRecordCount = value;
-            //}
         }
         public T Data { get; private set; }
     }
