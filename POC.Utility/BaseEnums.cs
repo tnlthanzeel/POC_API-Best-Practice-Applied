@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace POC.Utility
+﻿namespace POC.Utility
 {
     public class BaseEnums
     {
