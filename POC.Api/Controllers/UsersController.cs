@@ -1,5 +1,4 @@
-﻿using Marvin.Cache.Headers;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using POC.Application.Features.Users.Command.CreateUser;
@@ -10,88 +9,85 @@ using POC.Application.Features.Users.Queries.GetUserList;
 using POC.Application.Responses;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
-namespace POC.Api.Controllers
+namespace POC.Api.Controllers;
+
+[Route("api/users")]
+//[ResponseCache(CacheProfileName = "DefaultCache")]
+public class UsersController : AppControllerBase
 {
-    [Route("api/users")]
-    //[ResponseCache(CacheProfileName = "DefaultCache")]
-    public class UsersController : AppControllerBase
+    private readonly IMediator _mediator;
+
+    public UsersController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public UsersController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet(Name = "GetAllUsers")]
-        //[ResponseCache(Duration = 120)]
-        [ProducesResponseType(typeof(ResponseResult<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
-        //[HttpCacheValidation(MustRevalidate = true)]
-        public async Task<ActionResult<ResponseResult<IEnumerable<UserViewModel>>>> GetAllUsers()
-        {
-            var viewModel = await _mediator.Send(new GetUsersListQuery());
-            return Ok(viewModel);
-        }
+    [HttpGet(Name = "GetAllUsers")]
+    //[ResponseCache(Duration = 120)]
+    [ProducesResponseType(typeof(ResponseResult<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
+    //[HttpCacheValidation(MustRevalidate = true)]
+    public async Task<ActionResult<ResponseResult<IEnumerable<UserViewModel>>>> GetAllUsers()
+    {
+        var viewModel = await _mediator.Send(new GetUsersListQuery());
+        return Ok(viewModel);
+    }
 
 
-        [HttpGet("{id}", Name = "GetUser")]
-        //[ResponseCache(Duration = 120)]
-        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
-        //[HttpCacheValidation(MustRevalidate = true)]
-        public async Task<ActionResult<ResponseResult<UserDetailViewModel>>> GetUser(Guid id)
-        {
-            var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
-            return Ok(viewModel);
-        }
+    [HttpGet("{id}", Name = "GetUser")]
+    //[ResponseCache(Duration = 120)]
+    [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
+    //[HttpCacheValidation(MustRevalidate = true)]
+    public async Task<ActionResult<ResponseResult<UserDetailViewModel>>> GetUser(Guid id)
+    {
+        var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
+        return Ok(viewModel);
+    }
 
-        [HttpPost(Name = "AddUser")]
-        [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+    [HttpPost(Name = "AddUser")]
+    [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
 
-        public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
-        {
-            var response = await _mediator.Send(createUserCommand);
+    public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
+    {
+        var response = await _mediator.Send(createUserCommand);
 
-            if (response.Success)
-                return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
+        if (response.Success)
+            return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
 
-            else
-                return UnsuccessfullResponse(response);
+        else
+            return UnsuccessfullResponse(response);
 
-        }
+    }
 
-        [HttpPut("{id}", Name = "UpdateUser")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
-        {
-            updateUserCommand.Id = id;
-            await _mediator.Send(updateUserCommand);
+    [HttpPut("{id}", Name = "UpdateUser")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
+    {
+        updateUserCommand.Id = id;
+        await _mediator.Send(updateUserCommand);
 
-            return NoContent();
-        }
+        return NoContent();
+    }
 
-        [HttpDelete("{id}", Name = "DeleteUser")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            var deleteUserCommand = new DeleteUserCommand() { Id = id };
-            await _mediator.Send(deleteUserCommand);
-            return NoContent();
-        }
+    [HttpDelete("{id}", Name = "DeleteUser")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var deleteUserCommand = new DeleteUserCommand() { Id = id };
+        await _mediator.Send(deleteUserCommand);
+        return NoContent();
     }
 }
