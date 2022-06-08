@@ -1,3 +1,5 @@
+using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using POC.Api.Middleware;
 using POC.Application;
+using POC.Application.Features.Schools.Command.CreateSchool;
 using POC.Infrastructure;
 using POC.Persistence;
 using System.Collections.Generic;
@@ -46,12 +49,10 @@ namespace POC.Api
             services.AddInfrastructureServices(Configuration);
             services.AddPersistenceServices(Configuration);
 
-
             services.AddCors(options =>
             {
                 options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
-
 
             services.AddControllers(cfg =>
             {
@@ -62,7 +63,9 @@ namespace POC.Api
             }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
+            }).AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<CreateSchoolCommandValidator>()); ;
+
+            services.AddFluentValidationRulesToSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
