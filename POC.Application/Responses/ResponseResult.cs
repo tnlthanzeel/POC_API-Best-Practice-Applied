@@ -28,7 +28,7 @@ public sealed class ResponseResult<T> : BaseResponse
 
         if (validationFailures.Count is not 0)
         {
-            ValidationErrors.AddRange(validationFailures.Select(s => new KeyValuePair<string, string>(s.PropertyName, s.ErrorMessage)).ToList());
+            ValidationErrors.AddRange(validationFailures.Select(s => new KeyValuePair<string, IEnumerable<string>>(s.PropertyName, new[] { s.ErrorMessage })).ToList());
         }
     }
 
@@ -37,11 +37,13 @@ public sealed class ResponseResult<T> : BaseResponse
         Success = false;
         Data = default;
 
+        var errorMsg = new[] { ex.Message };
+
         switch (ex)
         {
             case BadRequestException e:
                 HttpStatusCode = HttpStatusCode.BadRequest;
-                ValidationErrors.Add(new KeyValuePair<string, string>(e.PropertyName, ex.Message));
+                ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(e.PropertyName, errorMsg));
                 break;
 
             case ValidationException e:
@@ -51,7 +53,7 @@ public sealed class ResponseResult<T> : BaseResponse
 
             case NotFoundException e:
                 HttpStatusCode = HttpStatusCode.NotFound;
-                ValidationErrors.Add(new KeyValuePair<string, string>(nameof(HttpStatusCode.NotFound), ex.Message));
+                ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.NotFound), errorMsg));
                 break;
 
         };

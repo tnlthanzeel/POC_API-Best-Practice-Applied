@@ -5,14 +5,14 @@ namespace POC.Application.Exceptions
 {
     public class ValidationException : ApplicationException
     {
-        public List<KeyValuePair<string, string>> ValdationErrors { get; set; } = new();
+        public List<KeyValuePair<string, IEnumerable<string>>> ValdationErrors { get; set; } = new();
 
         public ValidationException(List<KeyValuePair<string, string>> validationResult)
         {
 
             foreach (var validationError in validationResult)
             {
-                ValdationErrors.Add(new KeyValuePair<string, string>(validationError.Key, validationError.Value));
+                ValdationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(validationError.Key, new[] { validationError.Value }));
             }
         }
     }

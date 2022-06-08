@@ -70,13 +70,14 @@ public class Startup
             {
                 return new BadRequestObjectResult(new ResponseResult<object>(default(object))
                 {
-                    ValidationErrors = c.ModelState.Keys.Select(key => new KeyValuePair<string, string>(key, GetValue(key))).ToList()
+                    ValidationErrors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetValue(key))).ToList()
                 }); ;
 
-                string GetValue(string key)
+                IEnumerable<string> GetValue(string key)
                 {
                     var modelStateVal = c.ModelState[key];
-                    var validations = string.Join(", ", modelStateVal.Errors.Select(s => s.ErrorMessage));
+                    //var validations = string.Join(", ", modelStateVal.Errors.Select(s => s.ErrorMessage));
+                    var validations = modelStateVal.Errors.Select(s => s.ErrorMessage).ToList();
 
                     return validations;
                 }
@@ -84,7 +85,11 @@ public class Startup
         }).AddNewtonsoftJson(options =>
         {
             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        }).AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<CreateSchoolCommandValidator>()); ;
+        }).AddFluentValidation(cfg =>
+        {
+            cfg.ImplicitlyValidateChildProperties = true;
+            cfg.RegisterValidatorsFromAssemblyContaining<CreateSchoolCommandValidator>();
+        });
 
         services.AddFluentValidationRulesToSwagger();
     }
