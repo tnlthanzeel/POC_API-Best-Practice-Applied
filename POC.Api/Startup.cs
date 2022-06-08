@@ -18,6 +18,7 @@ using POC.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
 
 namespace POC.Api;
@@ -46,8 +47,6 @@ public class Startup
         //});
 
         //services.AddResponseCaching();
-
-        AddSwagger(services);
 
         services.AddApplicationServices();
         services.AddInfrastructureServices(Configuration);
@@ -92,6 +91,8 @@ public class Startup
         });
 
         services.AddFluentValidationRulesToSwagger();
+
+        AddSwagger(services);
     }
 
 
@@ -133,6 +134,7 @@ public class Startup
     {
         services.AddSwaggerGen(c =>
         {
+            c.AddEnumsWithValuesFixFilters();
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -170,5 +172,7 @@ public class Startup
 
             });
         });
+
+        services.AddSwaggerGenNewtonsoftSupport();
     }
 }
