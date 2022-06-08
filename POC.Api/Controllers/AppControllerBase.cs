@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using POC.Application.Responses;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace POC.Api.Controllers;
 

@@ -32,7 +32,7 @@ namespace POC.Api.Middleware
             }
         }
 
-        private Task ConvertException(HttpContext context, Exception exception)
+        private static Task ConvertException(HttpContext context, Exception exception)
         {
             var errorResponse = new ErrorResponse() { ValidationErrors = new List<string>() };
 
@@ -44,24 +44,6 @@ namespace POC.Api.Middleware
 
             switch (exception)
             {
-                //case ValidationException validationException:
-                //    httpStatusCode = HttpStatusCode.BadRequest;
-                //    errorResponse.ValidationErrors.AddRange(validationException.ValdationErrors);
-                //    result = JsonConvert.SerializeObject(errorResponse);
-                //    break;
-
-                //case BadRequestException badRequestException:
-                //    httpStatusCode = HttpStatusCode.BadRequest;
-                //    errorResponse.ValidationErrors.Add(badRequestException.Message);
-                //    result = JsonConvert.SerializeObject(errorResponse);
-                //    break;
-
-                //case NotFoundException notFoundException:
-                //    httpStatusCode = HttpStatusCode.NotFound;
-                //    errorResponse.ValidationErrors.Add(notFoundException.Message);
-                //    result = JsonConvert.SerializeObject(errorResponse);
-                //    break;
-
                 case Exception:
                     httpStatusCode = HttpStatusCode.InternalServerError;
                     errorResponse.ValidationErrors.Add("Something went wrong, please try again");
@@ -69,11 +51,16 @@ namespace POC.Api.Middleware
                     break;
             }
 
-            Log.Error($"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}\n{new string('-', 150)}\n");
+            Log.Error(SeroligTemplate(exception));
 
             context.Response.StatusCode = (int)httpStatusCode;
 
             return context.Response.WriteAsync(result);
+        }
+
+        private static string SeroligTemplate(Exception exception)
+        {
+            return $"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}\n{new string('-', 150)}\n";
         }
     }
 }
