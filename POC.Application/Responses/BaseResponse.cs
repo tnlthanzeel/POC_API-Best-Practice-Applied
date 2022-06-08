@@ -5,7 +5,7 @@ namespace POC.Application.Responses
     public abstract class BaseResponse
     {
         public bool Success { get; protected set; }
-        public List<string> ValidationErrors { get; set; } = new List<string>();
+        public List<KeyValuePair<string, string>> ValidationErrors { get; set; } = new();
 
         public BaseResponse()
         {

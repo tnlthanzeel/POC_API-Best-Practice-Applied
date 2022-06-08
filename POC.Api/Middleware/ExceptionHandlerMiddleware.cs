@@ -32,7 +32,7 @@ public class ExceptionHandlerMiddleware
 
     private static Task ConvertException(HttpContext context, Exception exception)
     {
-        var errorResponse = new ErrorResponse() { ValidationErrors = new List<string>() };
+        ErrorResponse errorResponse = new();
 
         HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
 
@@ -44,7 +44,7 @@ public class ExceptionHandlerMiddleware
         {
             case Exception:
                 httpStatusCode = HttpStatusCode.InternalServerError;
-                errorResponse.ValidationErrors.Add("Something went wrong, please try again");
+                errorResponse.ValidationErrors.Add(new KeyValuePair<string, string>(nameof(HttpStatusCode.InternalServerError), "Something went wrong, please try again"));
                 result = JsonConvert.SerializeObject(errorResponse);
                 break;
         }

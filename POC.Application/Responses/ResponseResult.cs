@@ -9,12 +9,13 @@ namespace POC.Application.Responses;
 
 public sealed class ResponseResult<T> : BaseResponse
 {
-    [Newtonsoft.Json.JsonIgnore] // ingore the property when serializing
-    [System.Text.Json.Serialization.JsonIgnore] // ingore the property in swagger doc
+    [Newtonsoft.Json.JsonIgnore] // to ignore the property when serializing
+    [System.Text.Json.Serialization.JsonIgnore] // to ignore the property in swagger doc
     public HttpStatusCode HttpStatusCode { get; }
 
     public ResponseResult(T value, int totalRecordCount = 1) : base()
     {
+        Success = value is not null;
         Data = value;
         _totalRecordCount = totalRecordCount;
     }
@@ -25,9 +26,9 @@ public sealed class ResponseResult<T> : BaseResponse
         Success = false;
         Data = default;
 
-        if (validationFailures.Count > 0)
+        if (validationFailures.Count is not 0)
         {
-            ValidationErrors.AddRange(validationFailures.Select(s => s.ErrorMessage).ToList());
+            ValidationErrors.AddRange(validationFailures.Select(s => new KeyValuePair<string, string>(s.PropertyName, s.ErrorMessage)).ToList());
         }
     }
 
@@ -38,9 +39,9 @@ public sealed class ResponseResult<T> : BaseResponse
 
         switch (ex)
         {
-            case BadRequestException:
+            case BadRequestException e:
                 HttpStatusCode = HttpStatusCode.BadRequest;
-                ValidationErrors.Add(ex.Message);
+                ValidationErrors.Add(new KeyValuePair<string, string>(e.PropertyName, ex.Message));
                 break;
 
             case ValidationException e:
@@ -48,9 +49,9 @@ public sealed class ResponseResult<T> : BaseResponse
                 ValidationErrors.AddRange(e.ValdationErrors);
                 break;
 
-            case NotFoundException:
+            case NotFoundException e:
                 HttpStatusCode = HttpStatusCode.NotFound;
-                ValidationErrors.Add(ex.Message);
+                ValidationErrors.Add(new KeyValuePair<string, string>(nameof(HttpStatusCode.NotFound), ex.Message));
                 break;
 
         };
@@ -61,7 +62,7 @@ public sealed class ResponseResult<T> : BaseResponse
     {
         get
         {
-            if (Data == null)
+            if (Data is null)
             {
                 _totalRecordCount = 0;
             }

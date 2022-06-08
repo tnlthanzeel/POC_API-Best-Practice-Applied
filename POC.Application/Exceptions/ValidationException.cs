@@ -1,21 +1,18 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace POC.Application.Exceptions
 {
     public class ValidationException : ApplicationException
     {
-        public List<string> ValdationErrors { get; set; }
+        public List<KeyValuePair<string, string>> ValdationErrors { get; set; } = new();
 
-        public ValidationException(List<string> validationResult)
+        public ValidationException(List<KeyValuePair<string, string>> validationResult)
         {
-            ValdationErrors = new List<string>();
 
             foreach (var validationError in validationResult)
             {
-                ValdationErrors.Add(validationError);
+                ValdationErrors.Add(new KeyValuePair<string, string>(validationError.Key, validationError.Value));
             }
         }
     }

@@ -30,9 +30,8 @@ namespace POC.Application.Features.Users.Command.UpdateUser
 
             if (eventToUpdate == null)
             {
-                throw new NotFoundException(nameof(User), request.Id);
+                throw new NotFoundException(nameof(request.Id), nameof(User), request.Id);
             }
-
 
             var validationResult = await Validator<UpdateUserCommandValidator>.ValidateAsync(request);
 

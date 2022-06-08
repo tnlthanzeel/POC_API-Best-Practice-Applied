@@ -28,7 +28,7 @@ namespace POC.Application.Features.Users.Command.DeleteUserCommand
 
             if (userToDelete == null)
             {
-                throw new NotFoundException(nameof(User), request.Id);
+                throw new NotFoundException(nameof(request.Id), nameof(User), request.Id);
             }
 
             await _userRepository.DeleteAsync(userToDelete);

@@ -12,9 +12,13 @@ using Newtonsoft.Json.Serialization;
 using POC.Api.Middleware;
 using POC.Application;
 using POC.Application.Features.Schools.Command.CreateSchool;
+using POC.Application.Responses;
 using POC.Infrastructure;
 using POC.Persistence;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
 
 namespace POC.Api;
 
@@ -60,6 +64,23 @@ public class Startup
             {
                 Duration = 240
             });
+        }).ConfigureApiBehaviorOptions(options =>
+        {
+            options.InvalidModelStateResponseFactory = c =>
+            {
+                return new BadRequestObjectResult(new ResponseResult<object>(default(object))
+                {
+                    ValidationErrors = c.ModelState.Keys.Select(key => new KeyValuePair<string, string>(key, GetValue(key))).ToList()
+                }); ;
+
+                string GetValue(string key)
+                {
+                    var modelStateVal = c.ModelState[key];
+                    var validations = string.Join(", ", modelStateVal.Errors.Select(s => s.ErrorMessage));
+
+                    return validations;
+                }
+            };
         }).AddNewtonsoftJson(options =>
         {
             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -67,6 +88,8 @@ public class Startup
 
         services.AddFluentValidationRulesToSwagger();
     }
+
+
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

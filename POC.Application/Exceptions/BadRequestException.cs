@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace POC.Application.Exceptions
+namespace POC.Application.Exceptions;
+
+public class BadRequestException : ApplicationException
 {
-    public class BadRequestException : ApplicationException
-    {
-        public BadRequestException(string message) : base(message)
-        {
+    public string PropertyName = null;
 
-        }
+    public BadRequestException(string propertyName, string message) : base(message)
+    {
+        PropertyName = propertyName;
     }
 }

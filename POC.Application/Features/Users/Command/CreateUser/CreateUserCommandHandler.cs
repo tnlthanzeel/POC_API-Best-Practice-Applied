@@ -6,6 +6,7 @@ using POC.Application.Responses;
 using POC.Application.Validators;
 using POC.Domain.Entitities;
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +25,9 @@ namespace POC.Application.Features.Users.Command.CreateUser
 
         public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            // request.Gender = 0;
+            //request.Grade.Name = null;
+
             var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 
             if (validationResult.IsValid == false)
@@ -31,13 +35,12 @@ namespace POC.Application.Features.Users.Command.CreateUser
                 return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
             }
 
-            // throw new Exception("this is an internal server error");
+            //throw new Exception("this is an internal server error");
+            var badRequestException = new BadRequestException(nameof(request.Grade.Name), "student first name is already taken");
 
-            var badRequestException = new BadRequestException("student name is already taken");
+            var notfound = new NotFoundException("Id", "student ID", 1);
 
-            var notfound = new NotFoundException("student ID", 1);
-
-            //return new ResponseResult<CreateUserCommandResponse>(badRequestException);
+           // return new ResponseResult<CreateUserCommandResponse>(badRequestException);
 
             var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 

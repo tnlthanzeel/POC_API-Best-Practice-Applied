@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using POC.Application.Responses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Command.CreateUser
@@ -14,5 +12,11 @@ namespace POC.Application.Features.Users.Command.CreateUser
         public string Address { get; set; }
         public string School { get; set; }
         public Gender Gender { get; set; }
+        public Grade Grade { get; set; } = new();
+    }
+
+    public class Grade
+    {
+        public string Name { get; set; }
     }
 }

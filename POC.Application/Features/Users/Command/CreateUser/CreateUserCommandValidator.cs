@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Command.CreateUser
@@ -31,6 +28,10 @@ namespace POC.Application.Features.Users.Command.CreateUser
 
             RuleFor(r => r.Gender)
                 .IsInEnum().NotEqual(Gender.None).WithName("Gender").WithMessage("{PropertyName} invalid gender");
+            
+            RuleFor(r => r.Grade.Name)
+                .NotEmpty().WithMessage("invalid grade name")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters."); ;
         }
     }
 }

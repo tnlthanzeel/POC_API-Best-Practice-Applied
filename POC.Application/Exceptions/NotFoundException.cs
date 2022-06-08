@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace POC.Application.Exceptions
 {
     public class NotFoundException : ApplicationException
     {
-        public NotFoundException(string name, object key)
+        public string PropertyName = null;
+
+        public NotFoundException(string propertyName, string name, object key)
             : base($"{name} ({key}) is not found")
         {
+            PropertyName = propertyName;
         }
     }
 }

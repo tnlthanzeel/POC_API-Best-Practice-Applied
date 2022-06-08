@@ -26,7 +26,7 @@ namespace POC.Application.Features.Users.Queries.GetUserDetail
 
             if (userDetail is null)
             {
-                throw new NotFoundException(nameof(User), request.UserId);
+                throw new NotFoundException(nameof(request.UserId),nameof(User), request.UserId);
             }
 
             var userDetailViewModel = _mapper.Map<UserDetailViewModel>(userDetail);
