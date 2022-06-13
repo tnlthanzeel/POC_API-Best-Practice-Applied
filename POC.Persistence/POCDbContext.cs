@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POC.Domain.Entitities;
+using static POC.Utility.BaseEnums;
 
 namespace POC.Persistence
 {
@@ -15,6 +16,11 @@ namespace POC.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(POCDbContext).Assembly);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<Gender>().HaveConversion<string>().HaveMaxLength(250);
         }
 
     }

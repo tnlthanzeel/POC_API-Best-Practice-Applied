@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POC.Persistence;
 
@@ -11,9 +12,10 @@ using POC.Persistence;
 namespace POC.Persistence.Migrations
 {
     [DbContext(typeof(POCDbContext))]
-    partial class POCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220613073807_adedd max length")]
+    partial class adeddmaxlength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
