@@ -1,7 +1,4 @@
-﻿using POC.Application.Responses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Queries.GetUserList

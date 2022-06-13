@@ -33,7 +33,6 @@ internal static partial class StartupHelpers
            IEnumerable<string> GetValue(string key)
            {
                var modelStateVal = c.ModelState[key];
-               //var validations = string.Join(", ", modelStateVal.Errors.Select(s => s.ErrorMessage));
                var validations = modelStateVal!.Errors.Select(s => s.ErrorMessage).ToList();
 
                return validations;
