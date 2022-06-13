@@ -49,14 +49,14 @@ public class ExceptionHandlerMiddleware
                 break;
         }
 
-        Log.Error(SeroligTemplate(exception));
+        Log.Error(SeriogTemplate(exception));
 
         context.Response.StatusCode = (int)httpStatusCode;
 
         return context.Response.WriteAsync(result);
     }
 
-    private static string SeroligTemplate(Exception exception)
+    private static string SeriogTemplate(Exception exception)
     {
         return $"\n\n Type:\n{exception.GetType()}\n\n Message:\n{exception?.InnerException?.Message ?? exception?.Message}\n\n Stack Trace:\n{exception?.InnerException?.StackTrace ?? exception?.StackTrace}\n{new string('-', 150)}\n";
     }
