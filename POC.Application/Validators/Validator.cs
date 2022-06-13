@@ -10,7 +10,7 @@ namespace POC.Application.Validators
         {
             var validator = new TValidator() as AbstractValidator<TRequest>;
 
-            var validationResult = await validator.ValidateAsync(request);
+            var validationResult = await validator!.ValidateAsync(request);
 
             return validationResult;
         }

@@ -60,7 +60,7 @@ public class UsersController : AppControllerBase
         var response = await _mediator.Send(createUserCommand);
 
         if (response.Success)
-            return CreatedAtRoute(nameof(GetUser), new { id = response.Data.Id }, response);
+            return CreatedAtRoute(nameof(GetUser), new { id = response.Data!.Id }, response);
 
         else
             return UnsuccessfullResponse(response);

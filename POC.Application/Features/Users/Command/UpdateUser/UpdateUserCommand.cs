@@ -10,10 +10,10 @@ namespace POC.Application.Features.Users.Command.UpdateUser
     public class UpdateUserCommand : IRequest<ResponseResult<Unit>>
     {
         public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Address { get; set; }
-        public string School { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        public string School { get; set; } = null!;
         public Gender Gender { get; set; }
     }
 }

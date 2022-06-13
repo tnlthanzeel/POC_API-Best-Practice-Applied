@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POC.Domain.Entitities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace POC.Persistence
 {
@@ -10,9 +7,9 @@ namespace POC.Persistence
     {
         public POCDbContext(DbContextOptions<POCDbContext> options) : base(options) { }
 
-        public DbSet<User> User { get; set; }
+        public DbSet<User> User { get; set; } = null!;
 
-        public DbSet<SchoolMaster> School { get; set; }
+        public DbSet<SchoolMaster> School { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
