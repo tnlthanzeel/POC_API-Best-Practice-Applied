@@ -4,7 +4,7 @@ namespace POC.Application.Exceptions;
 
 public class BadRequestException : ApplicationException
 {
-    public string PropertyName = null;
+    public string PropertyName;
 
     public BadRequestException(string propertyName, string message) : base(message)
     {

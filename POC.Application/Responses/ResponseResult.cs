@@ -13,7 +13,7 @@ public sealed class ResponseResult<T> : BaseResponse
     [System.Text.Json.Serialization.JsonIgnore] // to ignore the property in swagger doc
     public HttpStatusCode HttpStatusCode { get; }
 
-    public ResponseResult(T value, int totalRecordCount = 1) : base()
+    public ResponseResult(T? value, int totalRecordCount = 1) : base()
     {
         Success = value is not null;
         Data = value;
@@ -72,6 +72,6 @@ public sealed class ResponseResult<T> : BaseResponse
             return _totalRecordCount;
         }
     }
-    public T Data { get; private set; }
+    public T? Data { get; private set; }
 
 }

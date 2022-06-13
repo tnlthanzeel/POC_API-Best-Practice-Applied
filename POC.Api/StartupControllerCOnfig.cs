@@ -25,7 +25,7 @@ internal static partial class StartupHelpers
    {
        options.InvalidModelStateResponseFactory = c =>
        {
-           return new BadRequestObjectResult(new ResponseResult<object>(default(object))
+           return new BadRequestObjectResult(new ResponseResult<object?>(default(object))
            {
                ValidationErrors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetValue(key))).ToList()
            }); ;
@@ -34,7 +34,7 @@ internal static partial class StartupHelpers
            {
                var modelStateVal = c.ModelState[key];
                //var validations = string.Join(", ", modelStateVal.Errors.Select(s => s.ErrorMessage));
-               var validations = modelStateVal.Errors.Select(s => s.ErrorMessage).ToList();
+               var validations = modelStateVal!.Errors.Select(s => s.ErrorMessage).ToList();
 
                return validations;
            }
