@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Newtonsoft.Json;
 using POC.Application.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,7 @@ namespace POC.Application.Responses;
 
 public sealed class ResponseResult<T> : BaseResponse
 {
-    [Newtonsoft.Json.JsonIgnore] // to ignore the property when serializing
-    [System.Text.Json.Serialization.JsonIgnore] // to ignore the property in swagger doc
+    [JsonIgnore]
     public HttpStatusCode HttpStatusCode { get; }
 
     public ResponseResult(T? value, int totalRecordCount = 1) : base()
