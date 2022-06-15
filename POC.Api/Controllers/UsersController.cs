@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using POC.Application.Features.Users.Command.CreateUser;
 using POC.Application.Features.Users.Command.DeleteUserCommand;
@@ -7,9 +6,6 @@ using POC.Application.Features.Users.Command.UpdateUser;
 using POC.Application.Features.Users.Queries.GetUserDetail;
 using POC.Application.Features.Users.Queries.GetUserList;
 using POC.Application.Responses;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace POC.Api.Controllers;
 

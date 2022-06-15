@@ -26,7 +26,7 @@ namespace POC.Application.Features.Users.Command.CreateUser
         public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // request.Gender = 0;
-            //request.Grade.Name = null;
+            //request.Grade.Name = nullv;
 
             var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 
