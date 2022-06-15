@@ -51,7 +51,7 @@ public sealed class ResponseResult<T> : BaseResponse
                 ValidationErrors.AddRange(e.ValdationErrors);
                 break;
 
-            case NotFoundException e:
+            case NotFoundException:
                 HttpStatusCode = HttpStatusCode.NotFound;
                 ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.NotFound), errorMsg));
                 break;

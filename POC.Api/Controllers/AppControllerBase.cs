@@ -7,7 +7,7 @@ namespace POC.Api.Controllers;
 [ApiController]
 public abstract class AppControllerBase : ControllerBase
 {
-    public ActionResult<ResponseResult<T>> UnsuccessfullResponse<T>(ResponseResult<T> responseResult)
+    public ObjectResult UnsuccessfullResponse<T>(ResponseResult<T> responseResult)
     {
         if (responseResult.HttpStatusCode == HttpStatusCode.BadRequest)
             return BadRequest(responseResult);

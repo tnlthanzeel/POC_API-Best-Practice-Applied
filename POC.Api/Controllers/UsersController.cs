@@ -47,7 +47,8 @@ public class UsersController : AppControllerBase
     public async Task<ActionResult<ResponseResult<UserDetailViewModel>>> GetUser(Guid id)
     {
         var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
-        return Ok(viewModel);
+
+        return viewModel.Success ? Ok(viewModel) : UnsuccessfullResponse(viewModel);
     }
 
     [HttpPost(Name = "AddUser")]
@@ -59,11 +60,7 @@ public class UsersController : AppControllerBase
     {
         var response = await _mediator.Send(createUserCommand);
 
-        if (response.Success)
-            return CreatedAtRoute(nameof(GetUser), new { id = response.Data!.Id }, response);
-
-        else
-            return UnsuccessfullResponse(response);
+        return response.Success ? CreatedAtRoute(nameof(GetUser), new { id = response.Data!.Id }, response) : UnsuccessfullResponse(response);
 
     }
 
