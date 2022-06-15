@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace POC.Application.Features.Schools.Command.UpdateSchool
+namespace POC.Application.Features.Schools.Command.UpdateSchool;
+
+public class UpdateSchoolCommand : IRequest
 {
-    public class UpdateSchoolCommand : IRequest
-    {
-    }
 }

@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace POC.Application.Features.Schools.Command.DeleteSchool
+namespace POC.Application.Features.Schools.Command.DeleteSchool;
+
+public class DeleteSchoolCommand : IRequest
 {
-    public class DeleteSchoolCommand : IRequest
-    {
-        public string Id { get; set; } = null!;
-    }
+    public string Id { get; set; } = null!;
 }

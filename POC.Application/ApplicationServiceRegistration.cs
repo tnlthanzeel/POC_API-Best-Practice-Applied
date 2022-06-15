@@ -3,26 +3,25 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace POC.Application
+namespace POC.Application;
+
+public static class ApplicationServiceRegistration
 {
-    public static class ApplicationServiceRegistration
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        services.AddAutoMapper(cfg =>
+       {
+           cfg.AddDataReaderMapping();
+       }, Assembly.GetExecutingAssembly());
+
+        services.AddAutoMapper(cfg =>
         {
-            services.AddAutoMapper(cfg =>
-           {
-               cfg.AddDataReaderMapping();
-           }, Assembly.GetExecutingAssembly());
+            cfg.AddDataReaderMapping();
+        });
 
-            services.AddAutoMapper(cfg =>
-            {
-                cfg.AddDataReaderMapping();
-            });
-
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddMediatR(Assembly.GetExecutingAssembly());
 
 
-            return services;
-        }
+        return services;
     }
 }

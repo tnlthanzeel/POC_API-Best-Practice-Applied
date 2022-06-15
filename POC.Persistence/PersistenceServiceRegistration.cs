@@ -4,21 +4,20 @@ using Microsoft.Extensions.DependencyInjection;
 using POC.Application.Contracts.Persistence;
 using POC.Persistence.Repositories;
 
-namespace POC.Persistence
+namespace POC.Persistence;
+
+public static class PersistenceServiceRegistration
 {
-    public static class PersistenceServiceRegistration
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<POCDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("POCConnectionString"))
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+        services.AddDbContext<POCDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("POCConnectionString"))
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
+        services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
 
-            //services.AddScoped<IUserRepository, UserRepository>();
+        //services.AddScoped<IUserRepository, UserRepository>();
 
-            return services;
-        }
+        return services;
     }
 }

@@ -5,33 +5,32 @@ using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Domain.Entitities;
 
-namespace POC.Application.Features.Users.Queries.GetUserDetail
+namespace POC.Application.Features.Users.Queries.GetUserDetail;
+
+class GetUserDetailQueryHandler : IRequestHandler<GetUserDetailQuery, ResponseResult<UserDetailViewModel>>
 {
-    class GetUserDetailQueryHandler : IRequestHandler<GetUserDetailQuery, ResponseResult<UserDetailViewModel>>
+    private readonly IAsyncRepository<User> _userRepository;
+    private readonly IMapper _mapper;
+
+    public GetUserDetailQueryHandler(IAsyncRepository<User> userRepository, IMapper mapper)
     {
-        private readonly IAsyncRepository<User> _userRepository;
-        private readonly IMapper _mapper;
+        _userRepository = userRepository;
+        _mapper = mapper;
+    }
 
-        public GetUserDetailQueryHandler(IAsyncRepository<User> userRepository, IMapper mapper)
+    public async Task<ResponseResult<UserDetailViewModel>> Handle(GetUserDetailQuery request, CancellationToken cancellationToken)
+    {
+        var userDetail = await _userRepository.GetByIdAsync(request.UserId);
+
+        if (userDetail is null)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            throw new NotFoundException(nameof(request.UserId),nameof(User), request.UserId);
         }
 
-        public async Task<ResponseResult<UserDetailViewModel>> Handle(GetUserDetailQuery request, CancellationToken cancellationToken)
-        {
-            var userDetail = await _userRepository.GetByIdAsync(request.UserId);
+        var userDetailViewModel = _mapper.Map<UserDetailViewModel>(userDetail);
 
-            if (userDetail is null)
-            {
-                throw new NotFoundException(nameof(request.UserId),nameof(User), request.UserId);
-            }
+        var result = new ResponseResult<UserDetailViewModel>(userDetailViewModel);
 
-            var userDetailViewModel = _mapper.Map<UserDetailViewModel>(userDetail);
-
-            var result = new ResponseResult<UserDetailViewModel>(userDetailViewModel);
-
-            return result;
-        }
+        return result;
     }
 }

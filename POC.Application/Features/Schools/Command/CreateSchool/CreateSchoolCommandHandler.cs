@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace POC.Application.Features.Schools.Command.CreateSchool
+namespace POC.Application.Features.Schools.Command.CreateSchool;
+
+public class CreateSchoolCommandHandler : IRequestHandler<CreateSchoolCommand, CreateSchoolCommandResponse>
 {
-    public class CreateSchoolCommandHandler : IRequestHandler<CreateSchoolCommand, CreateSchoolCommandResponse>
+    private readonly IMapper _mapper;
+
+
+    public CreateSchoolCommandHandler(IMapper mapper)
     {
-        private readonly IMapper _mapper;
+        _mapper = mapper;
+    }
 
-
-        public CreateSchoolCommandHandler(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
-        public Task<CreateSchoolCommandResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<CreateSchoolCommandResponse> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
