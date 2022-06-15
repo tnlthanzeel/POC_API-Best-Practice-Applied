@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace POC.Application.Exceptions
+﻿namespace POC.Application.Exceptions
 {
     public class ValidationException : ApplicationException
     {

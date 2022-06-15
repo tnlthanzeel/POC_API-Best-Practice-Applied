@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace POC.Application.Exceptions
+﻿namespace POC.Application.Exceptions
 {
     public class NotFoundException : ApplicationException
     {

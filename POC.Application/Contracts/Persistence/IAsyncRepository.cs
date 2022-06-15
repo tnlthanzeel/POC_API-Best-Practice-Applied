@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace POC.Application.Contracts.Persistence
+﻿namespace POC.Application.Contracts.Persistence
 {
     public interface IAsyncRepository<T> where T : class
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace POC.Domain.Entitities
+﻿namespace POC.Domain.Entitities
 {
     public class SchoolMaster
     {

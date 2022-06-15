@@ -5,10 +5,6 @@ using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Application.Validators;
 using POC.Domain.Entitities;
-using System;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Command.CreateUser
 {
@@ -26,7 +22,7 @@ namespace POC.Application.Features.Users.Command.CreateUser
         public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // request.Gender = 0;
-            //request.Grade.Name = null;
+            //request.Grade.Name = nullv;
 
             var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 

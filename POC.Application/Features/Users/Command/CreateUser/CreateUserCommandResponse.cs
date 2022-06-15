@@ -1,5 +1,4 @@
-﻿using System;
-using static POC.Utility.BaseEnums;
+﻿using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Command.CreateUser
 {

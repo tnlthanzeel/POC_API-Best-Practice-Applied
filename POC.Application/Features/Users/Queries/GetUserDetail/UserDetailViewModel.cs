@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static POC.Utility.BaseEnums;
+﻿using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Queries.GetUserDetail
 {
-   public  class UserDetailViewModel
+    public  class UserDetailViewModel
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; } = null!;

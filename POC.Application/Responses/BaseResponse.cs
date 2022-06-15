@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace POC.Application.Responses
+﻿namespace POC.Application.Responses
 {
     public abstract class BaseResponse
     {

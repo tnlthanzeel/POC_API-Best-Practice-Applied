@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
-using FluentValidation.Results;
 using MediatR;
 using POC.Application.Contracts.Persistence;
 using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Application.Validators;
 using POC.Domain.Entitities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Command.UpdateUser
 {

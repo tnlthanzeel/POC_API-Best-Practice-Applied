@@ -3,9 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using POC.Application.Contracts.Persistence;
 using POC.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace POC.Persistence
 {

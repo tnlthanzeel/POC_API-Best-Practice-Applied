@@ -3,11 +3,6 @@ using MediatR;
 using POC.Application.Contracts.Persistence;
 using POC.Application.Exceptions;
 using POC.Domain.Entitities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Command.DeleteUserCommand
 {

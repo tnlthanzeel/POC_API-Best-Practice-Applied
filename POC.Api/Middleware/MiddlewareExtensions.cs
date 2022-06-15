@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace POC.Api.Middleware
+﻿namespace POC.Api.Middleware
 {
     public static class MiddlewareExtensions
     {

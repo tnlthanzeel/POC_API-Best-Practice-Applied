@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using POC.Application.Responses;
-using System.ComponentModel.DataAnnotations;
 using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Command.CreateUser

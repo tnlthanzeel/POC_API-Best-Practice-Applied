@@ -1,9 +1,6 @@
 ﻿using FluentValidation.Results;
 using Newtonsoft.Json;
 using POC.Application.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 
 namespace POC.Application.Responses;

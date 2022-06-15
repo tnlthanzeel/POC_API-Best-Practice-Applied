@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using System.Threading.Tasks;
 
 namespace POC.Application.Validators
 {

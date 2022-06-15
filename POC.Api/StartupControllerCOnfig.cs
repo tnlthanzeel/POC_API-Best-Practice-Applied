@@ -1,12 +1,9 @@
 ﻿using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using POC.Application.Features.Schools.Command.CreateSchool;
 using POC.Application.Responses;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace POC.Api;
 

@@ -4,8 +4,6 @@ using POC.Application.Contracts.Persistence;
 using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Domain.Entitities;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace POC.Application.Features.Users.Queries.GetUserDetail
 {
