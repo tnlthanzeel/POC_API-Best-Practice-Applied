@@ -21,8 +21,18 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
     public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        // request.Gender = 0;
-        //request.Grade.Name = nullv;
+        // --------------test code --------------------------
+
+        //var record1 = new CreateUserCommand("", "", "", "", Utility.BaseEnums.Gender.Male, new Grade(""));
+        //CreateUserCommand record2 = new("", "", "", "", Utility.BaseEnums.Gender.Male, new Grade(""));
+
+        //var copyofRecord1 = record1 with { School = "jsis" };
+
+        //request.Gender = 0;
+        //request.Grade.Name = null;
+
+        //--------------end test code --------------------------
+
 
         var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 
@@ -36,7 +46,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
         var notfound = new NotFoundException("Id", "student ID", 1);
 
-       // return new ResponseResult<CreateUserCommandResponse>(badRequestException);
+        // return new ResponseResult<CreateUserCommandResponse>(badRequestException);
 
         var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 

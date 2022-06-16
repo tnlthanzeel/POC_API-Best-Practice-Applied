@@ -4,7 +4,7 @@ using static POC.Utility.BaseEnums;
 
 namespace POC.Application.Features.Users.Command.UpdateUser;
 
-public class UpdateUserCommand : IRequest<ResponseResult<Unit>>
+public record UpdateUserCommand : IRequest<ResponseResult<Unit>>
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = null!;

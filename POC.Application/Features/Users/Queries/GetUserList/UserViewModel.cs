@@ -2,7 +2,7 @@
 
 namespace POC.Application.Features.Users.Queries.GetUserList;
 
-public class UserViewModel
+public record UserViewModel
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = null!;
