@@ -12,6 +12,7 @@ public class ResponseResult : BaseResponse
 
     public ResponseResult() : base()
     {
+        Data = null;
         _totalRecordCount = 0;
     }
 
@@ -63,7 +64,7 @@ public class ResponseResult : BaseResponse
         }
     }
 
-    public object? Data = null;
+    public object Data { get; private set; } = null!;
 }
 
 public sealed class ResponseResult<T> : ResponseResult
@@ -128,6 +129,6 @@ public sealed class ResponseResult<T> : ResponseResult
             return _totalRecordCount;
         }
     }
-    public T? Data { get; private set; }
+    public new T? Data { get; private set; }
 
 }

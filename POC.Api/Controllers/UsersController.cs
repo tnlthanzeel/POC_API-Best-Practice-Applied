@@ -74,7 +74,7 @@ public class UsersController : AppControllerBase
         updateUserCommand.Id = id;
         var response = await _mediator.Send(updateUserCommand);
 
-        return response.Success ? NoContent() : UnsuccessfullResponseNotGeneric(response);
+        return response.Success ? NoContent() : UnsuccessfullResponse(response);
     }
 
     [HttpDelete("{id}", Name = "DeleteUser")]
