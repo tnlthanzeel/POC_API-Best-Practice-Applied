@@ -19,4 +19,18 @@ public abstract class AppControllerBase : ControllerBase
             return StatusCode(statusCode: (int)HttpStatusCode.InternalServerError, responseResult);
 
     }
+
+    [HttpOptions]
+    public ObjectResult UnsuccessfullResponseNotGeneric(ResponseResult responseResult)
+    {
+        if (responseResult.HttpStatusCode == HttpStatusCode.BadRequest)
+            return BadRequest(responseResult);
+
+        else if (responseResult.HttpStatusCode == HttpStatusCode.NotFound)
+            return NotFound(responseResult);
+
+        else
+            return StatusCode(statusCode: (int)HttpStatusCode.InternalServerError, responseResult);
+
+    }
 }
