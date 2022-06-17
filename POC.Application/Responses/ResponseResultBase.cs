@@ -5,8 +5,6 @@ using System.Net;
 
 namespace POC.Application.Responses;
 
-public class NullObject { }
-
 public class ResponseResult : BaseResponse
 {
 
@@ -67,5 +65,5 @@ public class ResponseResult : BaseResponse
         }
     }
 
-    public NullObject? Data { get; private set; } = null!;
+    public Object? Data { get; private set; } = null!;
 }
