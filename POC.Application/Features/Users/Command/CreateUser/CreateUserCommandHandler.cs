@@ -28,7 +28,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
         //var copyofRecord1 = record1 with { School = "jsis" };
 
-        //request.Gender = 0;
+        request = request with { Gender = 0 };
         //request.Grade.Name = null;
 
         //--------------end test code --------------------------

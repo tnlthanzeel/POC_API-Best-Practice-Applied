@@ -24,10 +24,10 @@ internal static partial class StartupHelpers
        {
            return new BadRequestObjectResult(new ResponseResult<object?>(default(object))
            {
-               ValidationErrors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetValue(key))).ToList()
-           }); ;
+               Errors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetErrorMessages(key))).ToList()
+           });
 
-           IEnumerable<string> GetValue(string key)
+           IEnumerable<string> GetErrorMessages(string key)
            {
                var modelStateVal = c.ModelState[key];
                var validations = modelStateVal!.Errors.Select(s => s.ErrorMessage).ToList();

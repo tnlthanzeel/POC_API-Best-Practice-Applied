@@ -40,7 +40,7 @@ public class ExceptionHandlerMiddleware
         {
             case Exception:
                 httpStatusCode = HttpStatusCode.InternalServerError;
-                errorResponse.ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.InternalServerError), new[] { "Something went wrong, please try again" }));
+                errorResponse.Errors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.InternalServerError), new[] { "Something went wrong, please try again" }));
                 result = JsonConvert.SerializeObject(errorResponse);
                 break;
         }
