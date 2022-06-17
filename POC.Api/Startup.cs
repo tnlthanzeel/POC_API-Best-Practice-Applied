@@ -71,6 +71,8 @@ public class Startup
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Star garment POC API");
         });
 
+        app.UseHttpsRedirection();
+
         app.UseCors("Open");
 
         app.UseAuthorization();

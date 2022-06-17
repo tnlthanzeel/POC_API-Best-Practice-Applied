@@ -47,5 +47,8 @@ internal static partial class StartupHelpers
    });
 
         services.AddFluentValidationRulesToSwagger();
+
+        services.AddEndpointsApiExplorer();
     }
+
 }
