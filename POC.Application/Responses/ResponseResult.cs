@@ -31,6 +31,7 @@ public sealed class ResponseResult<T> : BaseResponse
 
     public ResponseResult(ApplicationException ex) : base()
     {
+        _totalRecordCount = 0;
         Success = false;
         Data = default;
 
