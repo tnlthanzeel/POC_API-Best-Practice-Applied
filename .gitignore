@@ -274,3 +274,5 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 /Code/Api/Stocky/wwwroot/products/*.jpg
+/POC.Api/POC.Api.xml
+/POC.Application/POC.Application.xml
