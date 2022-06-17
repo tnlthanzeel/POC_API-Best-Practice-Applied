@@ -28,8 +28,8 @@ public class UsersController : AppControllerBase
     //[HttpCacheValidation(MustRevalidate = true)]
     public async Task<ActionResult<ResponseResult<IEnumerable<UserViewModel>>>> GetAllUsers()
     {
-        var viewModel = await _mediator.Send(new GetUsersListQuery());
-        return Ok(viewModel);
+        var responseResult = await _mediator.Send(new GetUsersListQuery());
+        return responseResult.Success ? Ok(responseResult) : UnsuccessfullResponse(responseResult);
     }
 
 
@@ -62,15 +62,15 @@ public class UsersController : AppControllerBase
 
     [HttpPut("{id}", Name = "UpdateUser")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResponseResult<Unit>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseResult<Unit>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
     {
         updateUserCommand.Id = id;
-        await _mediator.Send(updateUserCommand);
+        var response = await _mediator.Send(updateUserCommand);
 
-        return NoContent();
+        return response.Success ? NoContent() : UnsuccessfullResponse(response);
     }
 
     [HttpDelete("{id}", Name = "DeleteUser")]
@@ -80,7 +80,9 @@ public class UsersController : AppControllerBase
     public async Task<ActionResult> Delete(Guid id)
     {
         var deleteUserCommand = new DeleteUserCommand() { Id = id };
-        await _mediator.Send(deleteUserCommand);
-        return NoContent();
+
+        var response = await _mediator.Send(deleteUserCommand);
+
+        return response.Success ? NoContent() : UnsuccessfullResponse(response);
     }
 }

@@ -22,17 +22,11 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
     {
         var eventToUpdate = await _userRepository.GetByIdAsync(request.Id);
 
-        if (eventToUpdate == null)
-        {
-            throw new NotFoundException(nameof(request.Id), nameof(User), request.Id);
-        }
+        if (eventToUpdate == null) return new ResponseResult<Unit>(new NotFoundException(nameof(request.Id), nameof(User), request.Id));
 
         var validationResult = await Validator<UpdateUserCommandValidator>.ValidateAsync(request);
 
-        if (validationResult.IsValid == false)
-        {
-            return new ResponseResult<Unit>(validationResult.Errors);
-        }
+        if (validationResult.IsValid == false) return new ResponseResult<Unit>(validationResult.Errors);
 
         _mapper.Map(request, eventToUpdate);
 

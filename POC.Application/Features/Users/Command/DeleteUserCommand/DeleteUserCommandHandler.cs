@@ -2,11 +2,12 @@
 using MediatR;
 using POC.Application.Contracts.Persistence;
 using POC.Application.Exceptions;
+using POC.Application.Responses;
 using POC.Domain.Entitities;
 
 namespace POC.Application.Features.Users.Command.DeleteUserCommand;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ResponseResult<Unit>>
 {
     private readonly IMapper _mapper;
     private readonly IAsyncRepository<User> _userRepository;
@@ -17,17 +18,15 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
         _userRepository = userRepository;
     }
 
-    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseResult<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var userToDelete = await _userRepository.GetByIdAsync(request.Id);
 
-        if (userToDelete == null)
-        {
-            throw new NotFoundException(nameof(request.Id), nameof(User), request.Id);
-        }
+        if (userToDelete == null) return new ResponseResult<Unit>(new NotFoundException(nameof(request.Id), nameof(User), request.Id));
+
 
         await _userRepository.DeleteAsync(userToDelete);
 
-        return Unit.Value;
+        return new ResponseResult<Unit>(Unit.Value);
     }
 }

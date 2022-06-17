@@ -22,10 +22,7 @@ class GetUserDetailQueryHandler : IRequestHandler<GetUserDetailQuery, ResponseRe
     {
         var userDetail = await _userRepository.GetByIdAsync(request.UserId);
 
-        if (userDetail is null)
-        {
-            throw new NotFoundException(nameof(request.UserId),nameof(User), request.UserId);
-        }
+        if (userDetail is null) return new ResponseResult<UserDetailViewModel>(new NotFoundException(nameof(request.UserId), nameof(User), request.UserId));
 
         var userDetailViewModel = _mapper.Map<UserDetailViewModel>(userDetail);
 
