@@ -1,4 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
+using POC.Application.Features.Users.Queries.GetUserDetail;
+using System.Reflection;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace POC.Api;
@@ -46,6 +48,16 @@ internal static partial class StartupHelpers
                 Title = "POC API",
 
             });
+
+            var apiCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var apiCommentsFullPath = Path.Combine(AppContext.BaseDirectory, apiCommentsFile);
+
+            c.IncludeXmlComments(apiCommentsFullPath);
+
+            var applicationCommentsFile = $"{typeof(UserDetailViewModel).Assembly.GetName().Name}.xml";
+            var applicationCommentsFullPath = Path.Combine(AppContext.BaseDirectory, applicationCommentsFile);
+
+            c.IncludeXmlComments(applicationCommentsFullPath);
         });
 
         services.AddSwaggerGenNewtonsoftSupport();
