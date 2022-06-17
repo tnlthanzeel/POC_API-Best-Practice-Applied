@@ -43,7 +43,7 @@ internal static partial class StartupHelpers
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "Star garment POC API",
+                Title = "POC API",
 
             });
         });

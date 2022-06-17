@@ -60,7 +60,7 @@ public class Startup
         //app.UseResponseCaching();
 
         //app.UseHttpCacheHeaders();
-
+        
         app.UseRouting();
 
         app.UseCustomExceptionHandler();
@@ -68,7 +68,7 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Star garment POC API");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "POC API");
         });
 
         app.UseHttpsRedirection();
