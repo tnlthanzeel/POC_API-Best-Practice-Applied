@@ -40,7 +40,7 @@ public class UsersController : AppControllerBase
     [HttpGet("{id}", Name = "GetUser")]
     //[ResponseCache(Duration = 120)]
     [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ResponseResult<>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
     //[HttpCacheValidation(MustRevalidate = true)]

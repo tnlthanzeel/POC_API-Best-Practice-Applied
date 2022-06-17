@@ -20,7 +20,6 @@ public abstract class AppControllerBase : ControllerBase
 
     }
 
-    [HttpOptions]
     public ObjectResult UnsuccessfullResponseNotGeneric(ResponseResult responseResult)
     {
         if (responseResult.HttpStatusCode == HttpStatusCode.BadRequest)

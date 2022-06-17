@@ -63,6 +63,7 @@ public class ResponseResult : BaseResponse
         }
     }
 
+    public object? Data = null;
 }
 
 public sealed class ResponseResult<T> : ResponseResult
