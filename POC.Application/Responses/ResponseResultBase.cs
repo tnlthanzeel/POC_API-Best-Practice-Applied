@@ -11,11 +11,7 @@ public class ResponseResult : BaseResponse
     [JsonIgnore]
     public HttpStatusCode HttpStatusCode { get; protected set; }
 
-    public ResponseResult() : base()
-    {
-        Data = null;
-        _totalRecordCount = 0;
-    }
+    public ResponseResult() : base() { }
 
     public ResponseResult(IList<ValidationFailure> validationFailures) : base()
     {
@@ -24,7 +20,7 @@ public class ResponseResult : BaseResponse
 
         if (validationFailures.Count is not 0)
         {
-            ValidationErrors.AddRange(validationFailures.Select(s => new KeyValuePair<string, IEnumerable<string>>(s.PropertyName, new[] { s.ErrorMessage })).ToList());
+            Errors.AddRange(validationFailures.Select(s => new KeyValuePair<string, IEnumerable<string>>(s.PropertyName, new[] { s.ErrorMessage })).ToList());
         }
     }
 
@@ -39,17 +35,17 @@ public class ResponseResult : BaseResponse
         {
             case BadRequestException e:
                 HttpStatusCode = HttpStatusCode.BadRequest;
-                ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(e.PropertyName, errorMsg));
+                Errors.Add(new KeyValuePair<string, IEnumerable<string>>(e.PropertyName, errorMsg));
                 break;
 
             case ValidationException e:
                 HttpStatusCode = HttpStatusCode.BadRequest;
-                ValidationErrors.AddRange(e.ValdationErrors);
+                Errors.AddRange(e.ValdationErrors);
                 break;
 
             case NotFoundException:
                 HttpStatusCode = HttpStatusCode.NotFound;
-                ValidationErrors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.NotFound), errorMsg));
+                Errors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.NotFound), errorMsg));
                 break;
 
         };
@@ -65,5 +61,5 @@ public class ResponseResult : BaseResponse
         }
     }
 
-    public Object? Data { get; private set; } = null!;
+    public EmptyObject? Data => null;
 }

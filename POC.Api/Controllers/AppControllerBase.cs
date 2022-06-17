@@ -8,7 +8,7 @@ namespace POC.Api.Controllers;
 public abstract class AppControllerBase : ControllerBase
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public ObjectResult UnsuccessfullResponse<T>(ResponseResult<T> responseResult)
+    protected ObjectResult UnsuccessfullResponse<T>(ResponseResult<T> responseResult)
     {
         if (responseResult.HttpStatusCode == HttpStatusCode.BadRequest)
             return BadRequest(responseResult);
@@ -22,7 +22,7 @@ public abstract class AppControllerBase : ControllerBase
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    public ObjectResult UnsuccessfullResponse(ResponseResult responseResult)
+    protected ObjectResult UnsuccessfullResponse(ResponseResult responseResult)
     {
         if (responseResult.HttpStatusCode == HttpStatusCode.BadRequest)
             return BadRequest(responseResult);

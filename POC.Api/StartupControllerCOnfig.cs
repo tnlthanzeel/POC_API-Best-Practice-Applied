@@ -22,7 +22,7 @@ internal static partial class StartupHelpers
    {
        options.InvalidModelStateResponseFactory = c =>
        {
-           return new BadRequestObjectResult(new ResponseResult<object?>(default(object))
+           return new BadRequestObjectResult(new ResponseResult()
            {
                Errors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetErrorMessages(key))).ToList()
            });
