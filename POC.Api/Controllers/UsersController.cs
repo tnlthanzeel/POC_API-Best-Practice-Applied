@@ -55,7 +55,6 @@ public class UsersController : AppControllerBase
     [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseResult<>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-
     public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
     {
         var response = await _mediator.Send(createUserCommand);
