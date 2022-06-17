@@ -5,20 +5,23 @@ using System.Net;
 
 namespace POC.Application.Responses;
 
-public class ResponseResult : BaseResponse
+public class ResponseResult<T> : BaseResponse
 {
-
     [JsonIgnore]
     public HttpStatusCode HttpStatusCode { get; protected set; }
 
-    public ResponseResult() : base()
+    public ResponseResult(T? value, int totalRecordCount = 1) : base()
     {
-        Success = true;
+        Success = value is not null;
+        Data = value;
+        _totalRecordCount = totalRecordCount;
     }
 
     public ResponseResult(IList<ValidationFailure> validationFailures) : base()
     {
         HttpStatusCode = HttpStatusCode.BadRequest;
+        Success = false;
+        Data = default;
 
         if (validationFailures.Count is not 0)
         {
@@ -28,8 +31,8 @@ public class ResponseResult : BaseResponse
 
     public ResponseResult(ApplicationException ex) : base()
     {
-        _totalRecordCount = 0;
         Success = false;
+        Data = default;
 
         var errorMsg = new[] { ex.Message };
 
@@ -54,14 +57,18 @@ public class ResponseResult : BaseResponse
     }
 
     private int _totalRecordCount = 1;
-    public virtual int TotalRecordCount
+    public int TotalRecordCount
     {
         get
         {
-            _totalRecordCount = 0;
+            if (Data is null)
+            {
+                _totalRecordCount = 0;
+            }
+
             return _totalRecordCount;
         }
     }
+    public T? Data { get; private set; }
 
-    public EmptyObject? Data { get => null; }
 }

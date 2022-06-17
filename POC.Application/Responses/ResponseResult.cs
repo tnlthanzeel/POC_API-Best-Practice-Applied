@@ -4,20 +4,16 @@ using System.Net;
 
 namespace POC.Application.Responses;
 
-public sealed class ResponseResult<T> : ResponseResult
+public sealed class ResponseResult : ResponseResult<EmptyObject>
 {
-    public ResponseResult(T? value, int totalRecordCount = 1) : base()
+    public ResponseResult() : base(default(EmptyObject))
     {
-        Success = value is not null;
-        Data = value;
-        _totalRecordCount = totalRecordCount;
+        Success = true;
     }
 
-    public ResponseResult(IList<ValidationFailure> validationFailures) : base()
+    public ResponseResult(IList<ValidationFailure> validationFailures) : base(default(EmptyObject))
     {
         HttpStatusCode = HttpStatusCode.BadRequest;
-        Success = false;
-        Data = default;
 
         if (validationFailures.Count is not 0)
         {
@@ -25,12 +21,8 @@ public sealed class ResponseResult<T> : ResponseResult
         }
     }
 
-    public ResponseResult(ApplicationException ex) : base()
+    public ResponseResult(ApplicationException ex) : base(default(EmptyObject))
     {
-        _totalRecordCount = 0;
-        Success = false;
-        Data = default;
-
         var errorMsg = new[] { ex.Message };
 
         switch (ex)
@@ -52,20 +44,4 @@ public sealed class ResponseResult<T> : ResponseResult
 
         };
     }
-
-    private int _totalRecordCount = 1;
-    public override int TotalRecordCount
-    {
-        get
-        {
-            if (Data is null)
-            {
-                _totalRecordCount = 0;
-            }
-
-            return _totalRecordCount;
-        }
-    }
-    public new T? Data { get; private set; }
-
 }
