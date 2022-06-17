@@ -26,7 +26,7 @@ public class UsersController : AppControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
     //[HttpCacheValidation(MustRevalidate = true)]
-    public async Task<ActionResult<ResponseResult<IEnumerable<UserViewModel>>>> GetAllUsers()
+    public async Task<ActionResult> GetAllUsers()
     {
         var responseResult = await _mediator.Send(new GetUsersListQuery());
         return responseResult.Success ? Ok(responseResult) : UnsuccessfullResponse(responseResult);
@@ -44,7 +44,7 @@ public class UsersController : AppControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
     //[HttpCacheValidation(MustRevalidate = true)]
-    public async Task<ActionResult<ResponseResult<UserDetailViewModel>>> GetUser(Guid id)
+    public async Task<ActionResult> GetUser(Guid id)
     {
         var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
 
@@ -55,7 +55,7 @@ public class UsersController : AppControllerBase
     [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ResponseResult<CreateUserCommandResponse>>> Create([FromBody] CreateUserCommand createUserCommand)
+    public async Task<ActionResult> Create([FromBody] CreateUserCommand createUserCommand)
     {
         var response = await _mediator.Send(createUserCommand);
 

@@ -20,6 +20,6 @@ public abstract class BaseResponse
 
     public BaseResponse()
     {
-        Success = true;
+        Success = false;
     }
 }

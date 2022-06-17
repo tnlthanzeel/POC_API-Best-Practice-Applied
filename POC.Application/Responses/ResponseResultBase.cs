@@ -11,12 +11,14 @@ public class ResponseResult : BaseResponse
     [JsonIgnore]
     public HttpStatusCode HttpStatusCode { get; protected set; }
 
-    public ResponseResult() : base() { }
+    public ResponseResult() : base()
+    {
+        Success = true;
+    }
 
     public ResponseResult(IList<ValidationFailure> validationFailures) : base()
     {
         HttpStatusCode = HttpStatusCode.BadRequest;
-        Success = false;
 
         if (validationFailures.Count is not 0)
         {
@@ -61,5 +63,5 @@ public class ResponseResult : BaseResponse
         }
     }
 
-    public EmptyObject? Data => null;
+    public EmptyObject? Data { get => null; }
 }
