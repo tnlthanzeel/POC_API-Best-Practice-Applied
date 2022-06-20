@@ -1,3 +1,3 @@
 ﻿namespace POC.Application.Responses;
 
-public sealed class EmptyObject { }
+public sealed record EmptyObject ();
