@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Results;
-using Newtonsoft.Json;
 using POC.Application.Exceptions;
 using System.Net;
 
@@ -45,10 +44,4 @@ public sealed class ResponseResult : ResponseResult<EmptyObject>
 
         };
     }
-
-    [JsonIgnore]
-    public override EmptyObject? Data => base.Data;
-
-    [JsonIgnore]
-    public override int TotalRecordCount => base.TotalRecordCount;
 }

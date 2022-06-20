@@ -23,6 +23,7 @@ public class UsersController : AppControllerBase
     [HttpGet(Name = "GetAllUsers")]
     //[ResponseCache(Duration = 120)]
     [ProducesResponseType(typeof(ResponseResult<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
     //[HttpCacheValidation(MustRevalidate = true)]
     public async Task<ActionResult> GetAllUsers()
@@ -39,6 +40,8 @@ public class UsersController : AppControllerBase
     [HttpGet("{id}", Name = "GetUser")]
     //[ResponseCache(Duration = 120)]
     [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
     //[HttpCacheValidation(MustRevalidate = true)]
     public async Task<ActionResult> GetUser(Guid id)
@@ -50,6 +53,8 @@ public class UsersController : AppControllerBase
 
     [HttpPost(Name = "AddUser")]
     [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> Create([FromBody] CreateUserCommand createUserCommand)
     {
         var response = await _mediator.Send(createUserCommand);
@@ -58,8 +63,11 @@ public class UsersController : AppControllerBase
 
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}", Name = "UpdateUser")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
     {
         updateUserCommand.Id = id;
@@ -70,6 +78,8 @@ public class UsersController : AppControllerBase
 
     [HttpDelete("{id}", Name = "DeleteUser")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> Delete(Guid id)
     {
         var deleteUserCommand = new DeleteUserCommand() { Id = id };

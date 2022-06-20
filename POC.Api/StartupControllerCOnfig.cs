@@ -17,11 +17,6 @@ internal static partial class StartupHelpers
             {
                 Duration = 240
             });
-
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status400BadRequest));
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status401Unauthorized));
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status404NotFound));
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResponse), StatusCodes.Status500InternalServerError));
         })
    .ConfigureApiBehaviorOptions(options =>
    {

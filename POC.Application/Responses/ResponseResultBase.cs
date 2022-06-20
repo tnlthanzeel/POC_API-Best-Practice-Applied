@@ -57,7 +57,7 @@ public class ResponseResult<T> : BaseResponse
     }
 
     private int _totalRecordCount = 1;
-    public virtual int TotalRecordCount
+    public int TotalRecordCount
     {
         get
         {
@@ -69,6 +69,6 @@ public class ResponseResult<T> : BaseResponse
             return _totalRecordCount;
         }
     }
-    public virtual T? Data { get; private set; }
+    public T? Data { get; private set; }
 
 }
