@@ -2,6 +2,7 @@
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using POC.Application.Features.Schools.Command.CreateSchool;
 using POC.Application.Responses;
 
@@ -13,14 +14,20 @@ internal static partial class StartupHelpers
     {
         services.AddControllers(cfg =>
         {
+            cfg.ReturnHttpNotAcceptable = true;
+
             cfg.CacheProfiles.Add("DefaultCache", new CacheProfile()
             {
                 Duration = 240
             });
 
+            cfg.Filters.Add(new ProducesAttribute("application/json"));
+            cfg.Filters.Add(new ConsumesAttribute("application/json"));
+
             cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status400BadRequest));
             cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status404NotFound));
             cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResponse), StatusCodes.Status500InternalServerError));
+
         })
    .ConfigureApiBehaviorOptions(options =>
    {
@@ -43,6 +50,8 @@ internal static partial class StartupHelpers
    .AddNewtonsoftJson(options =>
    {
        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+       options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
    })
    .AddFluentValidation(cfg =>
    {
