@@ -61,7 +61,8 @@ internal static partial class StartupHelpers
 
         services.AddFluentValidationRulesToSwagger();
 
-        services.AddEndpointsApiExplorer();
+        // register the service if using Minimal APIs
+        //services.AddEndpointsApiExplorer();
     }
 
 }
