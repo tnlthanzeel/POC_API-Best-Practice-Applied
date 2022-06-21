@@ -10,7 +10,6 @@ using POC.Application.Responses;
 namespace POC.Api.Controllers;
 
 [Route("api/users")]
-//[ResponseCache(CacheProfileName = "DefaultCache")]
 public class UsersController : AppControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,10 +20,7 @@ public class UsersController : AppControllerBase
     }
 
     [HttpGet(Name = "GetAllUsers")]
-    //[ResponseCache(Duration = 120)]
     [ProducesResponseType(typeof(ResponseResult<IEnumerable<UserViewModel>>), StatusCodes.Status200OK)]
-    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
-    //[HttpCacheValidation(MustRevalidate = true)]
     public async Task<ActionResult> GetAllUsers()
     {
         var responseResult = await _mediator.Send(new GetUsersListQuery());
@@ -37,10 +33,9 @@ public class UsersController : AppControllerBase
     /// <param name="id">The id of the user you want to get</param>
     /// <returns>A user object</returns>
     [HttpGet("{id}", Name = "GetUser")]
-    //[ResponseCache(Duration = 120)]
     [ProducesResponseType(typeof(ResponseResult<UserDetailViewModel>), StatusCodes.Status200OK)]
-    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 120)]
-    //[HttpCacheValidation(MustRevalidate = true)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+
     public async Task<ActionResult> GetUser(Guid id)
     {
         var viewModel = await _mediator.Send(new GetUserDetailQuery() { UserId = id });
@@ -60,6 +55,7 @@ public class UsersController : AppControllerBase
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand updateUserCommand)
     {
         updateUserCommand.Id = id;
@@ -70,6 +66,7 @@ public class UsersController : AppControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
         var deleteUserCommand = new DeleteUserCommand() { Id = id };

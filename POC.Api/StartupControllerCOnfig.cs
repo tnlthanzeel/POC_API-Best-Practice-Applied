@@ -24,8 +24,7 @@ internal static partial class StartupHelpers
             cfg.Filters.Add(new ProducesAttribute("application/json"));
             cfg.Filters.Add(new ConsumesAttribute("application/json"));
 
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status400BadRequest));
-            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ResponseResult), StatusCodes.Status404NotFound));
+            cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResponse), StatusCodes.Status400BadRequest));
             cfg.Filters.Add(new ProducesResponseTypeAttribute(typeof(ErrorResponse), StatusCodes.Status500InternalServerError));
 
         })
@@ -33,7 +32,7 @@ internal static partial class StartupHelpers
    {
        options.InvalidModelStateResponseFactory = c =>
        {
-           return new BadRequestObjectResult(new ResponseResult()
+           return new BadRequestObjectResult(new ErrorResponse()
            {
                Errors = c.ModelState.Keys.Select(key => new KeyValuePair<string, IEnumerable<string>>(key, GetErrorMessages(key))).ToList()
            });
