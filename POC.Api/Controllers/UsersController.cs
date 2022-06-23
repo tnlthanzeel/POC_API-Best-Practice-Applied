@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using POC.Application.Features.Users.Command.CreateUser;
 using POC.Application.Features.Users.Command.DeleteUserCommand;
@@ -6,6 +7,7 @@ using POC.Application.Features.Users.Command.UpdateUser;
 using POC.Application.Features.Users.Queries.GetUserDetail;
 using POC.Application.Features.Users.Queries.GetUserList;
 using POC.Application.Responses;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace POC.Api.Controllers;
 
@@ -43,7 +45,18 @@ public class UsersController : AppControllerBase
         return viewModel.Success ? Ok(viewModel) : UnsuccessfullResponse(viewModel);
     }
 
+    /// <summary>
+    /// some xml comment
+    /// </summary>
+    /// <param name="createUserCommand"></param>
+    /// <returns></returns>
     [HttpPost(Name = "AddUser")]
+    [SwaggerOperation(
+    Summary = "Creates a new Project",
+    Description = "Creates a new Project description",
+    OperationId = "Project.Create",
+    Tags = new[] { "ProjectEndpoints" })]
+
     [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
     public async Task<ActionResult> Create([FromBody] CreateUserCommand createUserCommand)
     {

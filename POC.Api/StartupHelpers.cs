@@ -12,6 +12,7 @@ internal static partial class StartupHelpers
         services.AddSwaggerGen(c =>
         {
             c.AddEnumsWithValuesFixFilters();
+            c.EnableAnnotations();
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
