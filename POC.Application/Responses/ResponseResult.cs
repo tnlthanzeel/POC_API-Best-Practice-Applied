@@ -47,5 +47,5 @@ public sealed class ResponseResult : ResponseResult<object>
     }
 
     [JsonIgnore]
-    public override List<KeyValuePair<string, IEnumerable<string>>> Errors => null!;
+    public override List<KeyValuePair<string, IEnumerable<string>>> Errors { get; init; } = new();
 }

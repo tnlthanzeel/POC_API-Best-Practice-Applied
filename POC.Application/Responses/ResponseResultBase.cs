@@ -8,7 +8,7 @@ namespace POC.Application.Responses;
 public class ResponseResult<T> : BaseResponse
 {
     [JsonIgnore]
-    public HttpStatusCode HttpStatusCode { get; protected set; }
+    public HttpStatusCode HttpStatusCode { get; protected init; }
 
     public ResponseResult(T? value, int totalRecordCount = 1) : base()
     {
@@ -72,6 +72,6 @@ public class ResponseResult<T> : BaseResponse
     public T? Data { get; private set; }
 
     [JsonIgnore]
-    public override List<KeyValuePair<string, IEnumerable<string>>> Errors => null!;
+    public override List<KeyValuePair<string, IEnumerable<string>>> Errors { get; init; } = new();
 
 }
