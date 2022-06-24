@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using POC.Application.Contracts.Persistence;
-using POC.Application.Exceptions;
 using POC.Application.Responses;
 using POC.Application.Validators;
 using POC.Domain.Entitities;
@@ -21,32 +20,9 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
     public async Task<ResponseResult<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        // --------------test code --------------------------
-
-        //var record1 = new CreateUserCommand("", "", "", "", Utility.BaseEnums.Gender.Male, new Grade(""));
-        //CreateUserCommand record2 = new("", "", "", "", Utility.BaseEnums.Gender.Male, new Grade(""));
-
-        //var copyofRecord1 = record1 with { School = "jsis" };
-
-        //request = request with { Gender = 0 };
-        //request.Grade.Name = null;
-
-        //--------------end test code --------------------------
-
-
         var validationResult = await Validator<CreateUserCommandValidator>.ValidateAsync(request);
 
-        if (validationResult.IsValid == false)
-        {
-            return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
-        }
-
-        //throw new Exception("this is an internal server error");
-        var badRequestException = new BadRequestException(nameof(request.Grade.Name), "student first name is already taken");
-
-        var notfound = new NotFoundException("Id", "student ID", 1);
-
-        // return new ResponseResult<CreateUserCommandResponse>(badRequestException);
+        if (validationResult is { IsValid: false }) return new ResponseResult<CreateUserCommandResponse>(validationResult.Errors);
 
         var user = new User().Create(request.FirstName, request.LastName, request.Address, request.School, request.Gender);
 
