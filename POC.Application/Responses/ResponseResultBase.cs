@@ -71,4 +71,7 @@ public class ResponseResult<T> : BaseResponse
     }
     public T? Data { get; private set; }
 
+    [JsonIgnore]
+    public override List<KeyValuePair<string, IEnumerable<string>>> Errors => null!;
+
 }

@@ -4,7 +4,7 @@ public abstract class BaseResponse
 {
     public bool Success { get; protected set; }
 
-    public List<KeyValuePair<string, IEnumerable<string>>> Errors { get; set; } = new();
+    public virtual List<KeyValuePair<string, IEnumerable<string>>> Errors { get; init; } = new();
 
     public BaseResponse()
     {

@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Newtonsoft.Json;
 using POC.Application.Exceptions;
 using System.Net;
 
@@ -44,4 +45,7 @@ public sealed class ResponseResult : ResponseResult<object>
 
         };
     }
+
+    [JsonIgnore]
+    public override List<KeyValuePair<string, IEnumerable<string>>> Errors => null!;
 }
