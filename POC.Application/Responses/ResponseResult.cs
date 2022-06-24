@@ -38,9 +38,9 @@ public sealed class ResponseResult : ResponseResult<object>
                 Errors.AddRange(e.ValdationErrors);
                 break;
 
-            case NotFoundException:
+            case NotFoundException e:
                 HttpStatusCode = HttpStatusCode.NotFound;
-                Errors.Add(new KeyValuePair<string, IEnumerable<string>>(nameof(HttpStatusCode.NotFound), errorMsg));
+                Errors.Add(new KeyValuePair<string, IEnumerable<string>>(e.PropertyName, errorMsg));
                 break;
 
         };
