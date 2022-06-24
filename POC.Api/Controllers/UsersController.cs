@@ -54,8 +54,9 @@ public class UsersController : AppControllerBase
     [SwaggerOperation(
     Summary = "Creates a new Project",
     Description = "Creates a new Project description",
-    OperationId = "Project.Create",
-    Tags = new[] { "ProjectEndpoints" })]
+    OperationId = "Project.Create")
+    //Tags = new[] { "ProjectEndpoints" })
+        ]
 
     [ProducesResponseType(typeof(ResponseResult<CreateUserCommandResponse>), StatusCodes.Status201Created)]
     public async Task<ActionResult> Create([FromBody] CreateUserCommand createUserCommand)

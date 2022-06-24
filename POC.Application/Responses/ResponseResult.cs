@@ -4,14 +4,14 @@ using System.Net;
 
 namespace POC.Application.Responses;
 
-public sealed class ResponseResult : ResponseResult<EmptyObject>
+public sealed class ResponseResult : ResponseResult<object>
 {
-    public ResponseResult() : base(default(EmptyObject))
+    public ResponseResult() : base(default(object))
     {
         Success = true;
     }
 
-    public ResponseResult(IList<ValidationFailure> validationFailures) : base(default(EmptyObject))
+    public ResponseResult(IList<ValidationFailure> validationFailures) : base(default(object))
     {
         HttpStatusCode = HttpStatusCode.BadRequest;
 
@@ -21,7 +21,7 @@ public sealed class ResponseResult : ResponseResult<EmptyObject>
         }
     }
 
-    public ResponseResult(ApplicationException ex) : base(default(EmptyObject))
+    public ResponseResult(ApplicationException ex) : base(default(object))
     {
         var errorMsg = new[] { ex.Message };
 
