@@ -8,7 +8,7 @@ using POC.Application.Responses;
 
 namespace POC.Api;
 
-internal static partial class StartupHelpers
+internal static class StartupControllerConfig
 {
     public static void AddControllerConfig(this IServiceCollection services)
     {

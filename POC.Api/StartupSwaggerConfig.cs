@@ -5,7 +5,7 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace POC.Api;
 
-internal static partial class StartupHelpers
+internal static  class StartupSwaggerConfig
 {
     public static void AddSwagger(this IServiceCollection services)
     {
