@@ -9,20 +9,24 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#if DEBUG
-Log.Logger = new LoggerConfiguration()
-   .ReadFrom.Configuration(builder.Configuration)
-   .WriteTo.Debug()
-   .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/log-.txt"), restrictedToMinimumLevel: LogEventLevel.Error, rollingInterval: RollingInterval.Day)
-   .CreateLogger();
-#else
-Log.Logger = new LoggerConfiguration()
-   .MinimumLevel.Error()
-   .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/log-.txt"), rollingInterval: RollingInterval.Day)
-   .CreateLogger();
-#endif
 
-//var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(builder.Configuration)
+       .WriteTo.Debug()
+       .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/log-.txt"), restrictedToMinimumLevel: LogEventLevel.Error, rollingInterval: RollingInterval.Day)
+       .CreateLogger();
+}
+
+if (!builder.Environment.IsDevelopment())
+{
+    Log.Logger = new LoggerConfiguration()
+       .MinimumLevel.Error()
+       .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/log-.txt"), rollingInterval: RollingInterval.Day)
+       .CreateLogger();
+}
+
 
 builder.Host.UseSerilog();
 
