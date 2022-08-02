@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "BlobBaseUrl": "https://vpmsteststrgacc.blob.core.windows.net"
+
+  },
+  "ConnectionStrings": {
+    "DbConnection": "some db connection"
+  }
+}
