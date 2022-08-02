@@ -1,0 +1,311 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Create_blob_for_email_body": {
+                "inputs": {
+                    "body": "@body('FixSourcePaths')['emailBody']",
+                    "headers": {
+                        "ReadFileMetadataFromServer": true
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                    "queries": {
+                        "folderPath": "@variables('variable-email-content-path')",
+                        "name": "@{variables('variable-emailId')}.html",
+                        "queryParametersSingleEncoded": true
+                    }
+                },
+                "runAfter": {
+                    "FixSourcePaths": [
+                        "Succeeded"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "ApiConnection"
+            },
+            "FixSourcePaths": {
+                "inputs": {
+                    "body": {
+                        "attachmentInfo": "@variables('variable-attachment-paths')",
+                        "emailBody": "@triggerBody()?['body']"
+                    },
+                    "function": {
+                        "id": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/resourceGroups/VPMS-test-rg/providers/Microsoft.Web/sites/vpms-test-func-app/functions/FixSourcePaths"
+                    },
+                    "method": "POST"
+                },
+                "runAfter": {
+                    "For_each_attachment": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Function"
+            },
+            "For_each_attachment": {
+                "actions": {
+                    "Condition": {
+                        "actions": {
+                            "Append_to_array_variable": {
+                                "inputs": {
+                                    "name": "variable-attachment-paths",
+                                    "value": {
+                                        "contentId": "@items('For_each_attachment')['contentId']",
+                                        "isInline": "@items('For_each_attachment')?['isInline']",
+                                        "path": "@body('Create_blob_for_attachment_files')?['Path']"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Create_blob_for_attachment_files": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "type": "AppendToArrayVariable"
+                            },
+                            "Create_blob_for_attachment_files": {
+                                "inputs": {
+                                    "body": "@base64ToBinary(items('For_each_attachment')?['contentBytes'])",
+                                    "headers": {
+                                        "ReadFileMetadataFromServer": true
+                                    },
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                    "queries": {
+                                        "folderPath": "@variables('variable-email-content-path')",
+                                        "name": "@items('For_each_attachment')?['name']",
+                                        "queryParametersSingleEncoded": true
+                                    }
+                                },
+                                "runAfter": {},
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                },
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "expression": {
+                            "and": [
+                                {
+                                    "or": [
+                                        {
+                                            "equals": [
+                                                "@triggerBody()?['hasAttachments']",
+                                                true
+                                            ]
+                                        },
+                                        {
+                                            "equals": [
+                                                "@items('For_each_attachment')?['isInline']",
+                                                true
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "runAfter": {},
+                        "type": "If"
+                    }
+                },
+                "foreach": "@triggerBody()?['attachments']",
+                "runAfter": {
+                    "Initialize_attachment_path_array": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "Initialize_attachment_path_array": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "variable-attachment-paths",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_email_content_path": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_email_content_path": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "variable-email-content-path",
+                            "type": "string",
+                            "value": "/emails/@{triggerBody()?['from']}/@{formatDateTime(utcNow(), 'yyyy-MM-dd')}/@{variables('variable-emailId')}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "initialize_email-Id": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Is_valid_vendor_email": {
+                "actions": {},
+                "else": {
+                    "actions": {
+                        "Terminate": {
+                            "inputs": {
+                                "runError": {
+                                    "code": "404",
+                                    "message": "vendor email @{triggerBody()?['from']} is not found"
+                                },
+                                "runStatus": "Failed"
+                            },
+                            "runAfter": {},
+                            "type": "Terminate"
+                        }
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@body('ValidateVendorEmail').isValidVendorEmail",
+                                true
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "ValidateVendorEmail": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            },
+            "SaveEmailReferencesToDB": {
+                "inputs": {
+                    "body": {
+                        "emailAttachmentPaths": "@variables('variable-attachment-paths')",
+                        "emailContentPath": "@variables('variable-email-content-path')",
+                        "emailId": "@variables('variable-emailId')"
+                    },
+                    "function": {
+                        "id": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/resourceGroups/VPMS-test-rg/providers/Microsoft.Web/sites/vpms-test-func-app/functions/SaveEmailReferencesToDB"
+                    }
+                },
+                "runAfter": {
+                    "Create_blob_for_email_body": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Function"
+            },
+            "ValidateVendorEmail": {
+                "inputs": {
+                    "body": "@triggerBody()?['from']",
+                    "function": {
+                        "id": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/resourceGroups/VPMS-test-rg/providers/Microsoft.Web/sites/vpms-test-func-app/functions/ValidateVendorEmail"
+                    }
+                },
+                "runAfter": {},
+                "type": "Function"
+            },
+            "initialize_email-Id": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "variable-emailId",
+                            "type": "string",
+                            "value": "@{guid()}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Is_valid_vendor_email": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_new_email_arrives_(V3)": {
+                "inputs": {
+                    "fetch": {
+                        "method": "get",
+                        "pathTemplate": {
+                            "template": "/v3/Mail/OnNewEmail"
+                        },
+                        "queries": {
+                            "fetchOnlyWithAttachment": false,
+                            "folderPath": "Inbox",
+                            "importance": "Any",
+                            "includeAttachments": true
+                        }
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['office365']['connectionId']"
+                        }
+                    },
+                    "subscribe": {
+                        "body": {
+                            "NotificationUrl": "@{listCallbackUrl()}"
+                        },
+                        "method": "post",
+                        "pathTemplate": {
+                            "template": "/GraphMailSubscriptionPoke/$subscriptions"
+                        },
+                        "queries": {
+                            "fetchOnlyWithAttachment": false,
+                            "folderPath": "Inbox",
+                            "importance": "Any"
+                        }
+                    }
+                },
+                "splitOn": "@triggerBody()?['value']",
+                "type": "ApiConnectionNotification"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureblob": {
+                    "connectionId": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/resourceGroups/VPMS-test-rg/providers/Microsoft.Web/connections/azureblob",
+                    "connectionName": "azureblob",
+                    "id": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/providers/Microsoft.Web/locations/centralus/managedApis/azureblob"
+                },
+                "office365": {
+                    "connectionId": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/resourceGroups/VPMS-test-rg/providers/Microsoft.Web/connections/office365",
+                    "connectionName": "office365",
+                    "id": "/subscriptions/c4e930c2-cad8-4259-8ae1-5a0f1ea63290/providers/Microsoft.Web/locations/centralus/managedApis/office365"
+                }
+            }
+        }
+    }
+}
